@@ -26,7 +26,6 @@ public class MenuScreen extends ScreenAdapter{
 	public void show() {
 		
 		Gdx.input.setInputProcessor(stage);
-		
 		Table table = new Table();
 		table.setFillParent(true);
 		table.setDebug(false);		//Ajoute des boites oour visualiser l'emplacement des elements si true.

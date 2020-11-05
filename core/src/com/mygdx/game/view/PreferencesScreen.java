@@ -35,6 +35,7 @@ public class PreferencesScreen extends ScreenAdapter{
 	
 	@Override
 	public void show() {
+		
 		stage.clear();
 		Gdx.input.setInputProcessor(stage);
 		
