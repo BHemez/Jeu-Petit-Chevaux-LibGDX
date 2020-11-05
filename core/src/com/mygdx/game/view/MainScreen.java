@@ -1,12 +1,13 @@
-package com.mygdx.game;
+package com.mygdx.game.view;
 
 import com.badlogic.gdx.ScreenAdapter;
+import com.mygdx.game.JeuDesPetitsChevaux;
 
-public class EndScreen extends ScreenAdapter {
-
+public class MainScreen extends ScreenAdapter{
+	
 	private JeuDesPetitsChevaux parent;
 	
-	public EndScreen(JeuDesPetitsChevaux jdpc) {
+	public MainScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
 	}
 	

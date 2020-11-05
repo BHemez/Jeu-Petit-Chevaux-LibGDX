@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +15,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.view.EndScreen;
+import com.mygdx.game.view.MainScreen;
+import com.mygdx.game.view.MenuScreen;
+import com.mygdx.game.view.PreferencesScreen;
 
 public class JeuDesPetitsChevaux extends Game /*implements InputProcessor*/ {
     Texture img;
@@ -39,6 +44,8 @@ public class JeuDesPetitsChevaux extends Game /*implements InputProcessor*/ {
     
     Viewport viewport;
     
+    private AppPreferences preferences;
+    
     private LoadingScreen loadingScreen;
     private PreferencesScreen preferencesScreen;
     private MenuScreen menuScreen;
@@ -51,7 +58,7 @@ public class JeuDesPetitsChevaux extends Game /*implements InputProcessor*/ {
     public final static int ENDGAME = 3;
 
 public void changeScreen(int screen){
-	System.out.print("CHANGEMENT D'ECRANT : ");
+	System.out.print("CHANGEMENT D'ECRAN : ");
 	switch(screen){
 		case MENU:
 			if(menuScreen == null) menuScreen = new MenuScreen(this);
@@ -78,6 +85,7 @@ public void changeScreen(int screen){
     
     @Override
     public void create () {
+    	preferences = new AppPreferences();
     	loadingScreen = new LoadingScreen(this);
     	System.out.println("LOADING-SCREEN");
     	this.setScreen(loadingScreen);
@@ -221,4 +229,9 @@ public void changeScreen(int screen){
         return false;
     }
     */
+
+    public AppPreferences getPreferences() {
+    	return this.preferences;
+    	}
+    
 }
