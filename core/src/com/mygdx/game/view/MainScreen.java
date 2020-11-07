@@ -15,10 +15,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
 import com.mygdx.game.OrthogonalTiledMapRendererWithSprites;
+import com.mygdx.game.controller.MouseKeyboardController;
 
-public class MainScreen extends ScreenAdapter implements InputProcessor{
+public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
 	
 	private JeuDesPetitsChevaux parent;
+	private MouseKeyboardController controller;
 	
     Texture img;
     TiledMap tiledMap;
@@ -57,6 +59,8 @@ public class MainScreen extends ScreenAdapter implements InputProcessor{
         //camera.setToOrtho(false,272,272);
         //camera.update();
         
+        //AJOUT DU CONTROLLEUR
+        controller = new MouseKeyboardController();
         
         //=== CHARGEMENT DES TEXTURES ===
         //texture = new Texture(Gdx.files.internal("pikachu.png"));
@@ -98,13 +102,39 @@ public class MainScreen extends ScreenAdapter implements InputProcessor{
 	}
 	
 	@Override
+	public void show() {
+		Gdx.input.setInputProcessor(controller);	
+	}
+	
+	@Override
     public void render(float delta) {
 
-        Gdx.input.setInputProcessor(this);
+        //Gdx.input.setInputProcessor(this);
 		
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+    	if(controller.left){
+    		camera.translate(-3,0);
+    	}else if(controller.right){
+    		camera.translate(3,0);
+    	}else if(controller.up){
+    		camera.translate(0,3);
+    	}else if(controller.down){
+    		camera.translate(0,-3);
+    	}else if(controller.escape){
+    		controller.escape = false;
+            parent.changeScreen(0);
+    	}
+        
+    	if(controller.isMouse1Down){
+            Vector3 clickCoordinates = new Vector3(controller.mouseLocation,0);
+            Vector3 position = camera.unproject(clickCoordinates);
+            // TO-DO : VERIFIER LA SELECTION, GARDER LE PION SUR LE CURSEUR, REPOSER LE PION SUR CASE VALIDE
+            spritePionRouge1.setPosition(position.x-8, position.y-8);	//-8 pour centrer le sprite 16*16 sur la sourie	//DEMO
+    	}
+    	
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
@@ -132,59 +162,5 @@ public class MainScreen extends ScreenAdapter implements InputProcessor{
        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 
     }
-    
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-    @Override
-    public boolean keyUp(int keycode) {
-    	//CHANGE TO SWITCH CASE
-        if(keycode == Input.Keys.LEFT)
-            camera.translate(-32,0);
-        if(keycode == Input.Keys.RIGHT)
-            camera.translate(32,0);
-        if(keycode == Input.Keys.UP)
-            camera.translate(0,32);
-        if(keycode == Input.Keys.DOWN)
-            camera.translate(0,-32);
-        if(keycode == Input.Keys.NUM_1)
-            tiledMap.getLayers().get(0).setVisible(!tiledMap.getLayers().get(0).isVisible());
-        if(keycode == Input.Keys.NUM_2)
-            tiledMap.getLayers().get(1).setVisible(!tiledMap.getLayers().get(1).isVisible());
-        if(keycode == Input.Keys.NUM_3)
-            tiledMap.getLayers().get(2).setVisible(!tiledMap.getLayers().get(2).isVisible());
-        if(keycode == Input.Keys.ESCAPE)
-            parent.changeScreen(0);
-        return false;
-    }
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector3 clickCoordinates = new Vector3(screenX,screenY,0);
-        Vector3 position = camera.unproject(clickCoordinates);
-        // TO-DO : VERIFIER LA SELECTION, GARDER LE PION SUR LE CURSEUR, REPOSER LE PION SUR CASE VALIDE
-        spritePionRouge1.setPosition(position.x, position.y);		//DEMO
-        return true;
-    }
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
-	
+ 
 }
