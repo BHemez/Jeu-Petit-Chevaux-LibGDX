@@ -2,6 +2,7 @@ package com.mygdx.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,9 +18,17 @@ public class MenuScreen extends ScreenAdapter{
 	private JeuDesPetitsChevaux parent;
 	private Stage stage;
 	
+	private Sound click;
+	
+	public static final int CLICK_SOUND = 0;
+	
 	public MenuScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
 		stage = new Stage(new ScreenViewport());
+		
+		parent.assetManager.queueAddSounds();
+		parent.assetManager.manager.finishLoading();
+		click = parent.assetManager.manager.get("sounds/click.mp3", Sound.class);
 	}
 	
 	@Override
@@ -50,6 +59,7 @@ public class MenuScreen extends ScreenAdapter{
 		exit.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				playSound(CLICK_SOUND);
 				Gdx.app.exit();				
 			}
 		});
@@ -57,6 +67,7 @@ public class MenuScreen extends ScreenAdapter{
 		preferences.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				playSound(CLICK_SOUND);
 				parent.changeScreen(JeuDesPetitsChevaux.PREFERENCES);		
 			}
 		});
@@ -64,6 +75,7 @@ public class MenuScreen extends ScreenAdapter{
 		newGame.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				playSound(CLICK_SOUND);
 				parent.changeScreen(JeuDesPetitsChevaux.APPLICATION);		
 			}
 		});
@@ -102,6 +114,14 @@ public class MenuScreen extends ScreenAdapter{
 	@Override
 	public void dispose() {
 		stage.dispose();
+	}
+	
+	public void playSound(int sound){
+		switch(sound){
+		case CLICK_SOUND:
+			click.play();
+			break;
+		}
 	}
 	
 }

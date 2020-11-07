@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
@@ -63,7 +64,7 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         controller = new MouseKeyboardController();
         
         //=== CHARGEMENT DES TEXTURES ===
-        //texture = new Texture(Gdx.files.internal("pikachu.png"));
+     /*   //texture = new Texture(Gdx.files.internal("pikachu.png"));
         texturePionRouge1 = new Texture(Gdx.files.internal("Rouge1.png"));
         texturePionRouge2 = new Texture(Gdx.files.internal("Rouge2.png"));
         texturePionVert1 = new Texture(Gdx.files.internal("Vert1.png"));
@@ -73,6 +74,22 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         texturePionBleu1 = new Texture(Gdx.files.internal("Bleu1.png"));
         texturePionBleu2 = new Texture(Gdx.files.internal("Bleu2.png"));
         
+       */
+
+		parent.assetManager.queueAddPions();
+		// tells the asset manager to load the images and wait until finsihed loading.
+		parent.assetManager.manager.finishLoading();
+		// gets the images as a texture
+		texturePionRouge1 = parent.assetManager.manager.get("pions/Rouge1.png");
+        texturePionRouge2 = parent.assetManager.manager.get("pions/Rouge2.png");
+        texturePionVert1 = parent.assetManager.manager.get("pions/Vert1.png");
+        texturePionVert2 = parent.assetManager.manager.get("pions/Vert2.png");
+        texturePionPourpre1 = parent.assetManager.manager.get("pions/Pourpre1.png");
+        texturePionPourpre2 = parent.assetManager.manager.get("pions/Pourpre2.png");
+        texturePionBleu1 = parent.assetManager.manager.get("pions/Bleu1.png");
+        texturePionBleu2 = parent.assetManager.manager.get("pions/Bleu2.png");
+		
+		
         //=== CHARGEMENT DES SPRITES ===
         //sprite = new Sprite(texture);
         spritePionRouge1 = new Sprite(texturePionRouge1);
@@ -98,7 +115,8 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         tiledMapRenderer.addSprite(spritePionPourpre2);
         tiledMapRenderer.addSprite(spritePionBleu1);
         tiledMapRenderer.addSprite(spritePionBleu2);
-		
+        
+        
 	}
 	
 	@Override

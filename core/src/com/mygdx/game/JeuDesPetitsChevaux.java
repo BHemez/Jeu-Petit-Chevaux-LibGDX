@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.loader.jdpcAssetManager;
 import com.mygdx.game.view.EndScreen;
 import com.mygdx.game.view.MainScreen;
 import com.mygdx.game.view.MenuScreen;
@@ -45,6 +46,7 @@ public class JeuDesPetitsChevaux extends Game /*implements InputProcessor*/ {
     Viewport viewport;
     
     private AppPreferences preferences;
+    public jdpcAssetManager assetManager = new jdpcAssetManager();
     
     private LoadingScreen loadingScreen;
     private PreferencesScreen preferencesScreen;
