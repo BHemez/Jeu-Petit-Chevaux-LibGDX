@@ -1,14 +1,11 @@
 package com.mygdx.game.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
@@ -64,18 +61,6 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         controller = new MouseKeyboardController();
         
         //=== CHARGEMENT DES TEXTURES ===
-     /*   //texture = new Texture(Gdx.files.internal("pikachu.png"));
-        texturePionRouge1 = new Texture(Gdx.files.internal("Rouge1.png"));
-        texturePionRouge2 = new Texture(Gdx.files.internal("Rouge2.png"));
-        texturePionVert1 = new Texture(Gdx.files.internal("Vert1.png"));
-        texturePionVert2 = new Texture(Gdx.files.internal("Vert2.png"));
-        texturePionPourpre1 = new Texture(Gdx.files.internal("Pourpre1.png"));
-        texturePionPourpre2 = new Texture(Gdx.files.internal("Pourpre2.png"));
-        texturePionBleu1 = new Texture(Gdx.files.internal("Bleu1.png"));
-        texturePionBleu2 = new Texture(Gdx.files.internal("Bleu2.png"));
-        
-       */
-
 		parent.assetManager.queueAddPions();
 		// tells the asset manager to load the images and wait until finsihed loading.
 		parent.assetManager.manager.finishLoading();

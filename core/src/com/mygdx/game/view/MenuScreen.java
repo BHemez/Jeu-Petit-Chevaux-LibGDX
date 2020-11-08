@@ -2,6 +2,7 @@ package com.mygdx.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,6 +20,8 @@ public class MenuScreen extends ScreenAdapter{
 	private Stage stage;
 	
 	private Sound click;
+	private Music jazz;
+	private Skin skin;
 	
 	public static final int CLICK_SOUND = 0;
 	
@@ -27,20 +30,28 @@ public class MenuScreen extends ScreenAdapter{
 		stage = new Stage(new ScreenViewport());
 		
 		parent.assetManager.queueAddSounds();
+		parent.assetManager.queueAddMusic();
+		parent.assetManager.queueAddSkin();
 		parent.assetManager.manager.finishLoading();
 		click = parent.assetManager.manager.get("sounds/click.mp3", Sound.class);
+		jazz = parent.assetManager.manager.get("music/Jazz.mp3", Music.class);
+		skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 	}
 	
 	@Override
 	public void show() {
 		
+		if(parent.getPreferences().isMusicEnabled()) {
+			jazz.play();
+		}
+
+		jazz.setVolume(parent.getPreferences().getMusicVolume());
+		
 		Gdx.input.setInputProcessor(stage);
 		Table table = new Table();
 		table.setFillParent(true);
-		table.setDebug(false);		//Ajoute des boites oour visualiser l'emplacement des elements si true.
+		table.setDebug(false);		//Ajoute des boites pour visualiser l'emplacement des elements si true.
 		stage.addActor(table);
-
-		Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 		
 		//CREATION DES BOUTONS
 		TextButton newGame = new TextButton("New Game", skin);
@@ -60,7 +71,7 @@ public class MenuScreen extends ScreenAdapter{
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playSound(CLICK_SOUND);
-				Gdx.app.exit();				
+				Gdx.app.exit();
 			}
 		});
 		
@@ -108,19 +119,24 @@ public class MenuScreen extends ScreenAdapter{
  
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		//jazz.pause();
+		jazz.stop();
 	}
  
 	@Override
 	public void dispose() {
 		stage.dispose();
+		jazz.dispose();
+		parent.assetManager.manager.dispose();
 	}
 	
 	public void playSound(int sound){
-		switch(sound){
-		case CLICK_SOUND:
-			click.play();
-			break;
+		if(parent.getPreferences().isSoundEffectsEnabled()) {
+			switch(sound){
+			case CLICK_SOUND:
+				click.play(parent.getPreferences().getSoundVolume());
+				break;
+			}
 		}
 	}
 	

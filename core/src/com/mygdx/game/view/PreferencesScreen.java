@@ -2,6 +2,7 @@ package com.mygdx.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -22,15 +23,26 @@ public class PreferencesScreen extends ScreenAdapter{
 	private JeuDesPetitsChevaux parent;
 	private Stage stage;
 	
+	private Sound click;
+	private Skin skin;
+	
 	private Label titleLabel; 
 	private Label volumeMusicLabel;
 	private Label volumeSoundLabel;
 	private Label musicOnOffLabel;
 	private Label soundOnOffLabel;
 	
+	public static final int CLICK_SOUND = 0;
+	
 	public PreferencesScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
 		stage = new Stage(new ScreenViewport());
+		
+		parent.assetManager.queueAddSounds();
+		parent.assetManager.queueAddSkin();
+		parent.assetManager.manager.finishLoading();
+		click = parent.assetManager.manager.get("sounds/click.mp3", Sound.class);
+		skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 	}
 	
 	@Override
@@ -43,8 +55,6 @@ public class PreferencesScreen extends ScreenAdapter{
 		table.setFillParent(true);
 		table.setDebug(false);		//Ajoute des boites oour visualiser l'emplacement des elements si true.
 		stage.addActor(table);
-
-		Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 		 
 		//volume music
 		final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin );
@@ -97,6 +107,7 @@ public class PreferencesScreen extends ScreenAdapter{
 		backButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				playSound(CLICK_SOUND);
 				parent.changeScreen(JeuDesPetitsChevaux.MENU);
 			}
 		});
@@ -157,6 +168,17 @@ public class PreferencesScreen extends ScreenAdapter{
 	@Override
 	public void dispose() {
 		stage.dispose();
+		parent.assetManager.manager.dispose();
+	}
+	
+	public void playSound(int sound){
+		if(parent.getPreferences().isSoundEffectsEnabled()) {
+			switch(sound){
+			case CLICK_SOUND:
+				click.play(parent.getPreferences().getSoundVolume());
+				break;
+			}
+		}
 	}
 	
 }
