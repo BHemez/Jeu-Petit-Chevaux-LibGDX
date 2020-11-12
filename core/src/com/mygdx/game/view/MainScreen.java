@@ -61,10 +61,6 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         controller = new MouseKeyboardController();
         
         //=== CHARGEMENT DES TEXTURES ===
-		parent.assetManager.queueAddPions();
-		// tells the asset manager to load the images and wait until finsihed loading.
-		parent.assetManager.manager.finishLoading();
-		// gets the images as a texture
 		texturePionRouge1 = parent.assetManager.manager.get("pions/Rouge1.png");
         texturePionRouge2 = parent.assetManager.manager.get("pions/Rouge2.png");
         texturePionVert1 = parent.assetManager.manager.get("pions/Vert1.png");

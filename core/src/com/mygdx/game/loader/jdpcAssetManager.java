@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class jdpcAssetManager {
@@ -53,6 +54,10 @@ public class jdpcAssetManager {
 	public void queueAddSkin(){
 		SkinParameter params = new SkinParameter("skin/glassy-ui.atlas");
 		manager.load(skin, Skin.class, params);
+	}
+	
+	public void queueAddLoading(){
+		manager.load("loading/loading.pack", TextureAtlas.class);
 	}
 	
 }

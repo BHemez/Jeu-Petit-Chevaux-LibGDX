@@ -38,9 +38,6 @@ public class PreferencesScreen extends ScreenAdapter{
 		this.parent = jdpc;
 		stage = new Stage(new ScreenViewport());
 		
-		parent.assetManager.queueAddSounds();
-		parent.assetManager.queueAddSkin();
-		parent.assetManager.manager.finishLoading();
 		click = parent.assetManager.manager.get("sounds/click.mp3", Sound.class);
 		skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 	}
