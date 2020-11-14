@@ -9,15 +9,19 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import java.util.ArrayList;
 import java.util.List;
 public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRenderer {
+	
     private List<Sprite> sprites;
     private int drawSpritesAfterLayer = 1;
+    
     public OrthogonalTiledMapRendererWithSprites(TiledMap map) {
         super(map);
         sprites = new ArrayList<Sprite>();
     }
-    public void addSprite(Sprite sprite){
+    
+    public void addSprite(Sprite sprite) {
         sprites.add(sprite);
     }
+    
     @Override
     public void render() {
         beginRender();
@@ -40,4 +44,5 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
         }
         endRender();
     }
+    
 }

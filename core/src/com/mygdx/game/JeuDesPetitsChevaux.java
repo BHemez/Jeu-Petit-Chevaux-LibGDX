@@ -1,11 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.loader.jdpcAssetManager;
 import com.mygdx.game.view.EndScreen;
 import com.mygdx.game.view.LoadingScreen;
@@ -14,29 +9,7 @@ import com.mygdx.game.view.MenuScreen;
 import com.mygdx.game.view.PreferencesScreen;
 
 public class JeuDesPetitsChevaux extends Game /*implements InputProcessor*/ {
-    Texture img;
-    TiledMap tiledMap;
-    OrthographicCamera camera;
-    OrthogonalTiledMapRendererWithSprites tiledMapRenderer;
-    Texture texturePionRouge1;
-    Texture texturePionRouge2;
-    Texture texturePionVert1;
-    Texture texturePionVert2;
-    Texture texturePionPourpre1;
-    Texture texturePionPourpre2;
-    Texture texturePionBleu1;
-    Texture texturePionBleu2;
-    Sprite spritePionRouge1;
-    Sprite spritePionRouge2;
-    Sprite spritePionVert1;
-    Sprite spritePionVert2;
-    Sprite spritePionPourpre1;
-    Sprite spritePionPourpre2;
-    Sprite spritePionBleu1;
-    Sprite spritePionBleu2;
-    
-    Viewport viewport;
-    
+
     private AppPreferences preferences;
     public jdpcAssetManager assetManager = new jdpcAssetManager();
     

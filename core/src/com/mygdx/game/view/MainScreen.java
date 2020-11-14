@@ -15,15 +15,15 @@ import com.mygdx.game.JeuDesPetitsChevaux;
 import com.mygdx.game.OrthogonalTiledMapRendererWithSprites;
 import com.mygdx.game.controller.MouseKeyboardController;
 
-public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
+public class MainScreen extends ScreenAdapter {
 	
 	private JeuDesPetitsChevaux parent;
 	private MouseKeyboardController controller;
 	
-    Texture img;
     TiledMap tiledMap;
     OrthographicCamera camera;
     OrthogonalTiledMapRendererWithSprites tiledMapRenderer;
+    
     Texture texturePionRouge1;
     Texture texturePionRouge2;
     Texture texturePionVert1;
@@ -54,9 +54,6 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         viewport.apply();
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
         
-        //camera.setToOrtho(false,272,272);
-        //camera.update();
-        
         //AJOUT DU CONTROLLEUR
         controller = new MouseKeyboardController();
         
@@ -71,8 +68,7 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         texturePionBleu2 = parent.assetManager.manager.get("pions/Bleu2.png");
 		
 		
-        //=== CHARGEMENT DES SPRITES ===
-        //sprite = new Sprite(texture);
+        //=== CREATION DES SPRITES ===
         spritePionRouge1 = new Sprite(texturePionRouge1);
         spritePionRouge2 = new Sprite(texturePionRouge2);
         spritePionVert1 = new Sprite(texturePionVert1);
@@ -87,7 +83,6 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap);
         
         //== AJOUT DES SPRITES SUR LA CARTE ===
-        //tiledMapRenderer.addSprite(sprite);
         tiledMapRenderer.addSprite(spritePionRouge1);
         tiledMapRenderer.addSprite(spritePionRouge2);
         tiledMapRenderer.addSprite(spritePionVert1);
@@ -96,8 +91,6 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         tiledMapRenderer.addSprite(spritePionPourpre2);
         tiledMapRenderer.addSprite(spritePionBleu1);
         tiledMapRenderer.addSprite(spritePionBleu2);
-        
-        
 	}
 	
 	@Override
@@ -106,10 +99,7 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
 	}
 	
 	@Override
-    public void render(float delta) {
-
-        //Gdx.input.setInputProcessor(this);
-		
+    public void render(float delta) {		
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -137,13 +127,10 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-
     }
     
     @Override
     public void dispose(){
-
-    	//sprite.getTexture().dispose();
     	spritePionRouge1.getTexture().dispose();
     	spritePionRouge2.getTexture().dispose();
     	spritePionVert1.getTexture().dispose();
@@ -152,14 +139,12 @@ public class MainScreen extends ScreenAdapter/* implements InputProcessor*/{
     	spritePionPourpre2.getTexture().dispose();
     	spritePionBleu1.getTexture().dispose();
     	spritePionBleu2.getTexture().dispose();
-
     }
+    
     @Override
     public void resize(int width, int height){
-
        viewport.update(width,height);
        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
-
     }
  
 }
