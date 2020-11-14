@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.loader.jdpcAssetManager;
 import com.mygdx.game.view.EndScreen;
+import com.mygdx.game.view.LoadingScreen;
 import com.mygdx.game.view.MainScreen;
 import com.mygdx.game.view.MenuScreen;
 import com.mygdx.game.view.PreferencesScreen;
