@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
@@ -24,14 +24,6 @@ public class MainScreen extends ScreenAdapter {
     OrthographicCamera camera;
     OrthogonalTiledMapRendererWithSprites tiledMapRenderer;
     
-    Texture texturePionRouge1;
-    Texture texturePionRouge2;
-    Texture texturePionVert1;
-    Texture texturePionVert2;
-    Texture texturePionPourpre1;
-    Texture texturePionPourpre2;
-    Texture texturePionBleu1;
-    Texture texturePionBleu2;
     Sprite spritePionRouge1;
     Sprite spritePionRouge2;
     Sprite spritePionVert1;
@@ -58,25 +50,17 @@ public class MainScreen extends ScreenAdapter {
         controller = new MouseKeyboardController();
         
         //=== CHARGEMENT DES TEXTURES ===
-		texturePionRouge1 = parent.assetManager.manager.get("pions/Rouge1.png");
-        texturePionRouge2 = parent.assetManager.manager.get("pions/Rouge2.png");
-        texturePionVert1 = parent.assetManager.manager.get("pions/Vert1.png");
-        texturePionVert2 = parent.assetManager.manager.get("pions/Vert2.png");
-        texturePionPourpre1 = parent.assetManager.manager.get("pions/Pourpre1.png");
-        texturePionPourpre2 = parent.assetManager.manager.get("pions/Pourpre2.png");
-        texturePionBleu1 = parent.assetManager.manager.get("pions/Bleu1.png");
-        texturePionBleu2 = parent.assetManager.manager.get("pions/Bleu2.png");
-		
+        TextureAtlas pionsAtlas = parent.assetManager.manager.get("pions/pions.pack", TextureAtlas.class);
 		
         //=== CREATION DES SPRITES ===
-        spritePionRouge1 = new Sprite(texturePionRouge1);
-        spritePionRouge2 = new Sprite(texturePionRouge2);
-        spritePionVert1 = new Sprite(texturePionVert1);
-        spritePionVert2 = new Sprite(texturePionVert2);
-        spritePionPourpre1 = new Sprite(texturePionPourpre1);
-        spritePionPourpre2 = new Sprite(texturePionPourpre2);
-        spritePionBleu1 = new Sprite(texturePionBleu1);
-        spritePionBleu2 = new Sprite(texturePionBleu2);
+        spritePionRouge1 = new Sprite(pionsAtlas.findRegion("Rouge1"));
+        spritePionRouge2 = new Sprite(pionsAtlas.findRegion("Rouge2"));
+        spritePionVert1 = new Sprite(pionsAtlas.findRegion("Vert1"));
+        spritePionVert2 = new Sprite(pionsAtlas.findRegion("Vert2"));
+        spritePionPourpre1 = new Sprite(pionsAtlas.findRegion("Pourpre1"));
+        spritePionPourpre2 = new Sprite(pionsAtlas.findRegion("Pourpre2"));
+        spritePionBleu1 = new Sprite(pionsAtlas.findRegion("Bleu1"));
+        spritePionBleu2 = new Sprite(pionsAtlas.findRegion("Bleu2"));
         
         //== CHARGEMENT DE LA CARTE ===
         tiledMap = new TmxMapLoader().load("carte.tmx");
