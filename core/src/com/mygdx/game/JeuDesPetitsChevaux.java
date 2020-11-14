@@ -1,17 +1,17 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.mygdx.game.loader.jdpcAssetManager;
+import com.mygdx.game.loader.JdpcAssetManager;
 import com.mygdx.game.view.EndScreen;
 import com.mygdx.game.view.LoadingScreen;
 import com.mygdx.game.view.MainScreen;
 import com.mygdx.game.view.MenuScreen;
 import com.mygdx.game.view.PreferencesScreen;
 
-public class JeuDesPetitsChevaux extends Game /*implements InputProcessor*/ {
+public class JeuDesPetitsChevaux extends Game {
 
     private AppPreferences preferences;
-    public jdpcAssetManager assetManager = new jdpcAssetManager();
+    public JdpcAssetManager assetManager = new JdpcAssetManager();
     
     private LoadingScreen loadingScreen;
     private PreferencesScreen preferencesScreen;
