@@ -1,5 +1,7 @@
 package com.mygdx.game.view;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -32,8 +34,14 @@ public class MainScreen extends ScreenAdapter {
     Sprite spritePionPourpre2;
     Sprite spritePionBleu1;
     Sprite spritePionBleu2;
+    Sprite spriteDice;
     
     Viewport viewport;
+    
+    TextureAtlas pionsAtlas;
+    TextureAtlas diceAtlas;
+    
+    int diceValue = 6;
 	
 	public MainScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
@@ -42,7 +50,7 @@ public class MainScreen extends ScreenAdapter {
         //float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
         
-        viewport = new FitViewport(272,272,camera);
+        viewport = new FitViewport(368,304,camera);
         viewport.apply();
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
         
@@ -50,7 +58,8 @@ public class MainScreen extends ScreenAdapter {
         controller = new MouseKeyboardController();
         
         //=== CHARGEMENT DES TEXTURES ===
-        TextureAtlas pionsAtlas = parent.assetManager.manager.get("pions/pions.pack", TextureAtlas.class);
+        pionsAtlas = parent.assetManager.manager.get("pions/pions.pack", TextureAtlas.class);
+        diceAtlas = parent.assetManager.manager.get("dice/dice.pack", TextureAtlas.class);
 		
         //=== CREATION DES SPRITES ===
         spritePionRouge1 = new Sprite(pionsAtlas.findRegion("Rouge1"));
@@ -61,12 +70,13 @@ public class MainScreen extends ScreenAdapter {
         spritePionPourpre2 = new Sprite(pionsAtlas.findRegion("Pourpre2"));
         spritePionBleu1 = new Sprite(pionsAtlas.findRegion("Bleu1"));
         spritePionBleu2 = new Sprite(pionsAtlas.findRegion("Bleu2"));
+        spriteDice = new Sprite(diceAtlas.findRegion("Dice6"));
         
-        //== CHARGEMENT DE LA CARTE ===
+        //=== CHARGEMENT DE LA CARTE ===
         tiledMap = new TmxMapLoader().load("carte.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap);
         
-        //== AJOUT DES SPRITES SUR LA CARTE ===
+        //=== AJOUT DES SPRITES SUR LA CARTE ===
         tiledMapRenderer.addSprite(spritePionRouge1);
         tiledMapRenderer.addSprite(spritePionRouge2);
         tiledMapRenderer.addSprite(spritePionVert1);
@@ -75,6 +85,18 @@ public class MainScreen extends ScreenAdapter {
         tiledMapRenderer.addSprite(spritePionPourpre2);
         tiledMapRenderer.addSprite(spritePionBleu1);
         tiledMapRenderer.addSprite(spritePionBleu2);
+        tiledMapRenderer.addSprite(spriteDice);
+        
+        //=== POSITIONNEMENT DES SPRITES SUR LA CARTE ===
+        spritePionRouge1.setPosition(80,80);
+        spritePionRouge2.setPosition(80,48);
+        spritePionVert1.setPosition(208,80);
+        spritePionVert2.setPosition(208,48);
+        spritePionPourpre1.setPosition(208,208);
+        spritePionPourpre2.setPosition(208,240);
+        spritePionBleu1.setPosition(80,208);
+        spritePionBleu2.setPosition(80,240);
+        spriteDice.setPosition(320,176);
 	}
 	
 	@Override
@@ -90,15 +112,17 @@ public class MainScreen extends ScreenAdapter {
         
     	if(controller.left){
     		camera.translate(-3,0);
-    	}else if(controller.right){
+    	}else if(controller.right) {
     		camera.translate(3,0);
-    	}else if(controller.up){
+    	}else if(controller.up) {
     		camera.translate(0,3);
-    	}else if(controller.down){
+    	}else if(controller.down) {
     		camera.translate(0,-3);
-    	}else if(controller.escape){
+    	}else if(controller.escape) {
     		controller.escape = false;
             parent.changeScreen(0);
+    	}else if(controller.spacebar) {
+    		this.throwDice();
     	}
         
     	if(controller.isMouse1Down){
@@ -113,6 +137,12 @@ public class MainScreen extends ScreenAdapter {
         tiledMapRenderer.render();
     }
     
+	public int throwDice() {
+		this.diceValue = new Random().nextInt(6)+1;
+		spriteDice.setRegion(diceAtlas.findRegion("Dice"+Integer.toString(diceValue)));
+		return diceValue;
+	}
+	
     @Override
     public void dispose(){
     	spritePionRouge1.getTexture().dispose();
@@ -123,6 +153,8 @@ public class MainScreen extends ScreenAdapter {
     	spritePionPourpre2.getTexture().dispose();
     	spritePionBleu1.getTexture().dispose();
     	spritePionBleu2.getTexture().dispose();
+    	spriteDice.getTexture().dispose();
+    	parent.assetManager.manager.dispose();
     }
     
     @Override

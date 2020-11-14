@@ -14,6 +14,7 @@ public class JdpcAssetManager {
 	//Textures
 	public final String loadingAtlas = "loading/loading.pack";
 	public final String pionsAtlas = "pions/pions.pack";
+	public final String diceAtlas = "dice/dice.pack";
 	
 	//Sounds
 	public final String clickSound = "sounds/click.mp3";
@@ -27,6 +28,10 @@ public class JdpcAssetManager {
 	
 	public void queueAddPions(){
 		manager.load(pionsAtlas, TextureAtlas.class);
+	}
+	
+	public void queueAddDice(){
+		manager.load(diceAtlas, TextureAtlas.class);
 	}
 	
 	public void queueAddSounds(){
