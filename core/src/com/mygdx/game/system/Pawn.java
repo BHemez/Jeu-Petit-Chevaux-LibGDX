@@ -11,8 +11,9 @@ public class Pawn {
     
     public int raceStartPosition;
     public int raceEndPosition;
-    public int racePosition;
+    public int racePosition = -1;
     public float[] stablePosition;
+    public Boolean passed55 = false;
     public Boolean isInStable;
 
     
@@ -23,6 +24,9 @@ public class Pawn {
         this.raceEndPosition = end;
         this.stablePosition = stable;
         this.isInStable = true;
+        if(start == 0 ) {
+        	passed55 = true;
+        }
     }
     
     public void setPosition(float x, float y) {
@@ -30,17 +34,15 @@ public class Pawn {
     }
     
     public void setToStablePosition() {
+    	this.racePosition = -1;
+    	this.isInStable = true;
+    	this.passed55 = false;
     	this.setPosition(this.stablePosition[0]*16, this.stablePosition[1]*16);
     }
     
     public void dispose() {
     	this.spritePion.getTexture().dispose();
     }
-
-	public void setToCorrectPosition() {
-		// TODO Replace to initial position if not draged on possible spot
-		
-	}
 
 	
 }

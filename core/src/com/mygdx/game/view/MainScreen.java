@@ -13,6 +13,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
@@ -50,11 +53,16 @@ public class MainScreen extends ScreenAdapter {
     
     public Actor possibleMove;
     public Actor selectedPawn;
+    public Label playerLabel;
+    public Label diceLabel;
     
     public Stage stage;
+    public Skin skin;
 	
 	public MainScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
+		
+		this.skin = jdpc.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 		
 		this.system = new JdpcSystem(this);
 
@@ -75,12 +83,12 @@ public class MainScreen extends ScreenAdapter {
         //=== CREATION DES SPRITES ===
         rouge1 = new Pawn(this.parent,"Rouge1",0,55, new float[]{5,5});
         rouge2 = new Pawn(this.parent,"Rouge2",0,55, new float[]{5,3});
-        bleu1 = new Pawn(this.parent,"Bleu1",14,13, new float[]{13,5});
-        bleu2 = new Pawn(this.parent,"Bleu2",14,13, new float[]{13,3});
+        bleu1 = new Pawn(this.parent,"Bleu1",14,13, new float[]{5,13});
+        bleu2 = new Pawn(this.parent,"Bleu2",14,13, new float[]{5,15});
         pourpre1 = new Pawn(this.parent,"Pourpre1",28,27, new float[]{13,13});
         pourpre2 = new Pawn(this.parent,"Pourpre2",28,27, new float[]{13,15});
-        vert1 = new Pawn(this.parent,"Vert1",42,41, new float[]{5,13});
-        vert2 = new Pawn(this.parent,"Vert2",42,41, new float[]{5,15});
+        vert1 = new Pawn(this.parent,"Vert1",42,41, new float[]{13,5});
+        vert2 = new Pawn(this.parent,"Vert2",42,41, new float[]{13,3});
    
         spriteDice = new Sprite(diceAtlas.findRegion("Dice6"));
         
@@ -115,8 +123,11 @@ public class MainScreen extends ScreenAdapter {
 	public void show() {
 		Gdx.input.setInputProcessor(controller);
 		
-        stage = new Stage();
-		
+        stage = new Stage(this.viewport);
+        
+        playerLabel = new Label("Joueur 1", skin);
+        diceLabel = new Label("Jetez", skin);
+	
 		TextureAtlas atlas = parent.assetManager.manager.get("possibleMove/possibleMove.pack", TextureAtlas.class);
 		
         Animation<AtlasRegion> anim1 = new Animation<AtlasRegion>(0.05f, atlas.findRegions("PossibleMove") );
@@ -127,8 +138,22 @@ public class MainScreen extends ScreenAdapter {
         anim2.setPlayMode(Animation.PlayMode.LOOP_REVERSED);
         selectedPawn = new PossibleMove(anim2);
         
+        stage.addActor(playerLabel);
+        stage.addActor(diceLabel);
         stage.addActor(possibleMove);
         stage.addActor(selectedPawn);
+        
+        
+        
+        playerLabel.setPosition(306, 256);
+        playerLabel.setSize(32, 16);
+        playerLabel.setFontScale(0.6f);
+        
+        diceLabel.setPosition(306, 158);
+        diceLabel.setFontScale(0.6f);
+        diceLabel.setAlignment(Align.center);
+        
+
         
     	this.possibleMove.setVisible(false);
     	this.selectedPawn.setVisible(false);
@@ -164,55 +189,77 @@ public class MainScreen extends ScreenAdapter {
             	if(!this.system.diceThrown) {
                 	this.system.throwDice();
             	}
-            } else if(rouge1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 1) {
-            	system.showPossibleMove(rouge1);
-            }  else if(rouge2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 1) {
-            	system.showPossibleMove(rouge2);
-            }  else if(bleu1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 2) {
-            	system.showPossibleMove(bleu1);
-            }  else if(bleu2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 2) {
-            	system.showPossibleMove(bleu2);
-            }  else if(pourpre1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 3) {
-            	system.showPossibleMove(pourpre1);
-            }  else if(pourpre2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 3) {
-            	system.showPossibleMove(pourpre2);
-            }  else if(vert1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 4) {
-            	system.showPossibleMove(vert1);
-            }  else if(vert2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 4) {
-            	system.showPossibleMove(vert2);
             }
+
+            if(this.system.moveDone == false) {
+                if(rouge1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 1) {
+                	system.showPossibleMove(rouge1);
+                }  else if(rouge2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 1) {
+                	system.showPossibleMove(rouge2);
+                }  else if(bleu1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 2) {
+                	system.showPossibleMove(bleu1);
+                }  else if(bleu2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 2) {
+                	system.showPossibleMove(bleu2);
+                }  else if(pourpre1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 3) {
+                	system.showPossibleMove(pourpre1);
+                }  else if(pourpre2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 3) {
+                	system.showPossibleMove(pourpre2);
+                }  else if(vert1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 4) {
+                	system.showPossibleMove(vert1);
+                }  else if(vert2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 4) {
+                	system.showPossibleMove(vert2);
+                } else {
+                	system.unShowPossibleMove();
+                }
+            }
+
     	}
     	
     	if(controller.isDragged) {
     		 Vector3 dragCoordinates = new Vector3(controller.mouseLocation,0);
              Vector3 position = camera.unproject(dragCoordinates);
-            // rouge1.setPosition(position.x-8, position.y-8); //-8 pour centrer le sprite 16*16 sur la sourie
-             if(rouge1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 1) {
-            	rouge1.setPosition(position.x-8, position.y-8);
-             }  else if(rouge2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 1) {
-            	rouge2.setPosition(position.x-8, position.y-8);
-             }  else if(bleu1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 2) {
-            	bleu1.setPosition(position.x-8, position.y-8);
-             }  else if(bleu2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 2) {
-            	bleu2.setPosition(position.x-8, position.y-8);
-             }  else if(pourpre1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 3) {
-            	pourpre1.setPosition(position.x-8, position.y-8);
-             }  else if(pourpre2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 3) {
-             	pourpre2.setPosition(position.x-8, position.y-8);
-             }  else if(vert1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 4) {
-             	vert1.setPosition(position.x-8, position.y-8);
-             }  else if(vert2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 4) {
-             	vert2.setPosition(position.x-8, position.y-8);
+             if(this.system.moveDone == false) {
+                 if(rouge1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 1) {
+                 	rouge1.setPosition(position.x-8, position.y-8);//-8 pour centrer le sprite 16*16 sur la sourie
+                  }  else if(rouge2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 1) {
+                 	rouge2.setPosition(position.x-8, position.y-8);
+                  }  else if(bleu1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 2) {
+                 	bleu1.setPosition(position.x-8, position.y-8);
+                  }  else if(bleu2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 2) {
+                 	bleu2.setPosition(position.x-8, position.y-8);
+                  }  else if(pourpre1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 3) {
+                 	pourpre1.setPosition(position.x-8, position.y-8);
+                  }  else if(pourpre2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 3) {
+                  	pourpre2.setPosition(position.x-8, position.y-8);
+                  }  else if(vert1.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 4) {
+                  	vert1.setPosition(position.x-8, position.y-8);
+                  }  else if(vert2.spritePion.getBoundingRectangle().contains(position.x, position.y) && system.playerTurn == 4) {
+                  	vert2.setPosition(position.x-8, position.y-8);
+                  }
              }
+
     	} else {
-    		rouge1.setToCorrectPosition();
-    		rouge2.setToCorrectPosition();
-    		bleu1.setToCorrectPosition();
-    		bleu2.setToCorrectPosition();
-    		pourpre1.setToCorrectPosition();
-    		pourpre2.setToCorrectPosition();
-    		vert1.setToCorrectPosition();
-    		vert2.setToCorrectPosition();
+    		switch(system.playerTurn) {
+    		case 1:
+        		this.system.setToCorrectPosition(rouge1);
+        		this.system.setToCorrectPosition(rouge2);
+        		break;
+        		
+    		case 2:
+        		this.system.setToCorrectPosition(bleu1);
+        		this.system.setToCorrectPosition(bleu2);
+        		break;
+    		
+    		case 3:
+	    		this.system.setToCorrectPosition(pourpre1);
+	    		this.system.setToCorrectPosition(pourpre2);
+	    		break;
+	    		
+    		case 4:
+	    		this.system.setToCorrectPosition(vert1);
+	    		this.system.setToCorrectPosition(vert2);
+	    		break;
+    		}
     	}
     	
         camera.update();
