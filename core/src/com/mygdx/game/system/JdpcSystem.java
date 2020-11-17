@@ -88,21 +88,17 @@ public class JdpcSystem {
 			if(pawn.isInStable) {
 				if(this.diceValue == 6 && this.diceThrown) {
 					screen.possibleMove.setVisible(true);
-					System.out.println("Possible move to : " + pawn.raceStartPosition);
 					screen.possibleMove.setPosition(POSITIONMATRIX[0][pawn.raceStartPosition]*16, POSITIONMATRIX[1][pawn.raceStartPosition]*16);
 				}
 			} else if((pawn.racePosition + this.diceValue >= pawn.raceEndPosition) && pawn.passed55 == true) {
 				screen.possibleMove.setVisible(true);
-				System.out.println("Possible move to : " + pawn.raceEndPosition);
 				screen.possibleMove.setPosition(POSITIONMATRIX[0][pawn.raceEndPosition]*16, POSITIONMATRIX[1][pawn.raceEndPosition]*16);
 			} else if(pawn.racePosition + this.diceValue > 55) {
 				screen.possibleMove.setVisible(true);
-				System.out.println("Possible move to : " + (pawn.racePosition + this.diceValue -55));
 				screen.possibleMove.setPosition(POSITIONMATRIX[0][pawn.racePosition + this.diceValue -55]*16,POSITIONMATRIX[1][pawn.racePosition + this.diceValue -55]*16);
 
 			} else {
 				screen.possibleMove.setVisible(true);
-				System.out.println("Possible move to : " + (pawn.racePosition + this.diceValue));
 				screen.possibleMove.setPosition(POSITIONMATRIX[0][pawn.racePosition + this.diceValue]*16,POSITIONMATRIX[1][pawn.racePosition + this.diceValue]*16);
 			} 
 		}
