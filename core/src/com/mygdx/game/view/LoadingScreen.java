@@ -35,10 +35,6 @@ public class LoadingScreen extends ScreenAdapter {
     
     private Viewport viewport;
     
-    public final static int MENU = 0;
-    public final static int PREFERENCES = 1;
-    public final static int APPLICATION = 2;
-    public final static int ENDGAME = 3;
 
     public LoadingScreen(JeuDesPetitsChevaux jdpc) {
         this.parent = jdpc;
@@ -135,7 +131,7 @@ public class LoadingScreen extends ScreenAdapter {
 
         if (parent.assetManager.manager.update()) { // Load some, will return true if done loading
             if (Gdx.input.isTouched()) { // If the screen is touched after the game is done loading, go to the main menu screen
-                parent.changeScreen(MENU);
+                parent.changeScreen(JeuDesPetitsChevaux.MENU);
             }
         } else {
         	System.out.println("Loading : "+ parent.assetManager.manager.getProgress()*100+" %");

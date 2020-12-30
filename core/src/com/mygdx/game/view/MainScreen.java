@@ -173,7 +173,7 @@ public class MainScreen extends ScreenAdapter {
     		camera.translate(0,-3);
     	}else if(controller.escape) {
     		controller.escape = false;
-            parent.changeScreen(0);
+            parent.changeScreen(JeuDesPetitsChevaux.MENU);
     	}else if(controller.spacebar) {
     		this.system.changeTurn();
     	}

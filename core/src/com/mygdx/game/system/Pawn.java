@@ -12,12 +12,13 @@ public class Pawn {
     public int raceStartPosition;
     public int raceEndPosition;
     public int racePosition = -1;
+    public int ladderPosition = -1;
     public float[] stablePosition;
     public float[][] ladderMatrix;
     public Boolean passed55 = false;
     public Boolean isInStable;
 
-    
+
     public Pawn(JeuDesPetitsChevaux parent, String pion, int start, int end, float[] stable, float[][] ladder) {
     	this.pionsAtlas = parent.assetManager.manager.get("pions/pions.pack", TextureAtlas.class);
         this.spritePion = new Sprite(pionsAtlas.findRegion(pion));
