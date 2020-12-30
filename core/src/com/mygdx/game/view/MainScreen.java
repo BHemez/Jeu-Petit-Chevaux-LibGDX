@@ -45,14 +45,16 @@ public class MainScreen extends ScreenAdapter {
     
     Viewport viewport;
     
-    TextureAtlas diceAtlas;
-    
     JdpcSystem system;
     
     public Actor possibleMove;
     public Actor selectedPawn;
     public Label playerLabel;
+    public Sprite playerIcon;
     public Label diceLabel;
+   
+    private TextureAtlas diceAtlas;
+    public TextureAtlas playerIconAtlas;
     
     public Stage stage;
     public Skin skin;
@@ -80,6 +82,7 @@ public class MainScreen extends ScreenAdapter {
         
         //=== CHARGEMENT DES TEXTURES ===
         diceAtlas = parent.assetManager.manager.get("dice/dice.pack", TextureAtlas.class);
+		this.playerIconAtlas = parent.assetManager.manager.get("playerIcon/playerIcon.pack");
 		
         //=== CREATION DES SPRITES ===
         rouge1 = new Pawn(this.parent,"Rouge1",0,55, new float[]{5,5}, GameMap.REDLADDERPOSITIONMATRIX);
@@ -92,6 +95,7 @@ public class MainScreen extends ScreenAdapter {
         vert2 = new Pawn(this.parent,"Vert2",42,41, new float[]{13,3}, GameMap.GREENLADDERPOSITIONMATRIX);
    
         spriteDice = new Sprite(diceAtlas.findRegion("Dice6"));
+        playerIcon = new Sprite(playerIconAtlas.findRegion("RedPlayer"));
         
         //=== AJOUT DES SPRITES SUR LA CARTE ===
         gameMap.tiledMapRenderer.addSprite(rouge1.spritePion);
@@ -103,6 +107,7 @@ public class MainScreen extends ScreenAdapter {
         gameMap.tiledMapRenderer.addSprite(pourpre1.spritePion);
         gameMap.tiledMapRenderer.addSprite(pourpre2.spritePion);
         gameMap.tiledMapRenderer.addSprite(spriteDice);
+        gameMap.tiledMapRenderer.addSprite(playerIcon);
         
         //=== POSITIONNEMENT DES SPRITES SUR LA CARTE ===
         rouge1.setToStablePosition();
@@ -114,6 +119,7 @@ public class MainScreen extends ScreenAdapter {
         bleu1.setToStablePosition();
         bleu2.setToStablePosition();
         spriteDice.setPosition(320,176);
+        playerIcon.setPosition(304, 240);
 	}
 	
 	@Override
@@ -140,17 +146,13 @@ public class MainScreen extends ScreenAdapter {
         stage.addActor(possibleMove);
         stage.addActor(selectedPawn);
         
-        
-        
-        playerLabel.setPosition(306, 256);
+        playerLabel.setPosition(306, 224);
         playerLabel.setSize(32, 16);
         playerLabel.setFontScale(0.6f);
         
         diceLabel.setPosition(306, 158);
         diceLabel.setFontScale(0.6f);
         diceLabel.setAlignment(Align.center);
-        
-
         
     	this.possibleMove.setVisible(false);
     	this.selectedPawn.setVisible(false);
@@ -278,6 +280,7 @@ public class MainScreen extends ScreenAdapter {
     	bleu1.dispose();
     	bleu2.dispose();
     	spriteDice.getTexture().dispose();
+    	playerIcon.getTexture().dispose();
     	parent.assetManager.manager.dispose();
     }
     

@@ -84,6 +84,7 @@ public class LoadingScreen extends ScreenAdapter {
 		parent.assetManager.queueAddMusic();
 		parent.assetManager.queueAddSkin();
 		parent.assetManager.queueAddPions();
+		parent.assetManager.queueAddPlayerIcon();
 		parent.assetManager.queueAddDice();
 		parent.assetManager.queueAddPossibleMove();
 		

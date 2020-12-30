@@ -33,7 +33,22 @@ public class JdpcSystem {
 			this.moveDone = false;
 			screen.playerLabel.setText("Joueur "+this.playerTurn);
 			screen.diceLabel.setText("Jetez");
-
+			
+	        switch(playerTurn) {
+        	case 1:
+        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("RedPlayer"));
+        		break;
+        	case 2:
+        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("BluePlayer"));
+        		break;
+        	case 3:
+        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("PurplePlayer"));
+        		break;
+        	case 4:
+        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("GreenPlayer"));
+        		break;
+        }
+			
 			System.out.println("TURN : Player " + this.playerTurn);
 		}
 	}
