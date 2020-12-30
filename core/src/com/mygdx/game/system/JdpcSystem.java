@@ -31,8 +31,7 @@ public class JdpcSystem {
 			}
 			this.diceThrown = false;
 			this.moveDone = false;
-			screen.playerLabel.setText("Joueur "+this.playerTurn);
-			screen.diceLabel.setText("Jetez");
+			screen.diceLabel.setText("Throw");
 			
 	        switch(playerTurn) {
         	case 1:

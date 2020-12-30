@@ -85,6 +85,7 @@ public class LoadingScreen extends ScreenAdapter {
 		parent.assetManager.queueAddSkin();
 		parent.assetManager.queueAddPions();
 		parent.assetManager.queueAddPlayerIcon();
+		parent.assetManager.queueAddButtons();
 		parent.assetManager.queueAddDice();
 		parent.assetManager.queueAddPossibleMove();
 		

@@ -52,9 +52,11 @@ public class MainScreen extends ScreenAdapter {
     public Label playerLabel;
     public Sprite playerIcon;
     public Label diceLabel;
+    public Sprite nextTurnButton;
    
     private TextureAtlas diceAtlas;
     public TextureAtlas playerIconAtlas;
+    public TextureAtlas buttonAtlas;
     
     public Stage stage;
     public Skin skin;
@@ -82,7 +84,8 @@ public class MainScreen extends ScreenAdapter {
         
         //=== CHARGEMENT DES TEXTURES ===
         diceAtlas = parent.assetManager.manager.get("dice/dice.pack", TextureAtlas.class);
-		this.playerIconAtlas = parent.assetManager.manager.get("playerIcon/playerIcon.pack");
+		playerIconAtlas = parent.assetManager.manager.get("playerIcon/playerIcon.pack");
+		buttonAtlas = parent.assetManager.manager.get("button/button.pack");
 		
         //=== CREATION DES SPRITES ===
         rouge1 = new Pawn(this.parent,"Rouge1",0,55, new float[]{5,5}, GameMap.REDLADDERPOSITIONMATRIX);
@@ -96,6 +99,7 @@ public class MainScreen extends ScreenAdapter {
    
         spriteDice = new Sprite(diceAtlas.findRegion("Dice6"));
         playerIcon = new Sprite(playerIconAtlas.findRegion("RedPlayer"));
+        nextTurnButton = new Sprite(buttonAtlas.findRegion("NextTurnButton"));
         
         //=== AJOUT DES SPRITES SUR LA CARTE ===
         gameMap.tiledMapRenderer.addSprite(rouge1.spritePion);
@@ -108,6 +112,7 @@ public class MainScreen extends ScreenAdapter {
         gameMap.tiledMapRenderer.addSprite(pourpre2.spritePion);
         gameMap.tiledMapRenderer.addSprite(spriteDice);
         gameMap.tiledMapRenderer.addSprite(playerIcon);
+        gameMap.tiledMapRenderer.addSprite(nextTurnButton);
         
         //=== POSITIONNEMENT DES SPRITES SUR LA CARTE ===
         rouge1.setToStablePosition();
@@ -120,6 +125,7 @@ public class MainScreen extends ScreenAdapter {
         bleu2.setToStablePosition();
         spriteDice.setPosition(320,176);
         playerIcon.setPosition(304, 240);
+        nextTurnButton.setPosition(304, 112);
 	}
 	
 	@Override
@@ -128,8 +134,8 @@ public class MainScreen extends ScreenAdapter {
 		
         stage = new Stage(this.viewport);
         
-        playerLabel = new Label("Joueur 1", skin);
-        diceLabel = new Label("Jetez", skin);
+        playerLabel = new Label("Player", skin);
+        diceLabel = new Label("Throw", skin);
 	
 		TextureAtlas atlas = parent.assetManager.manager.get("possibleMove/possibleMove.pack", TextureAtlas.class);
 		
@@ -146,11 +152,12 @@ public class MainScreen extends ScreenAdapter {
         stage.addActor(possibleMove);
         stage.addActor(selectedPawn);
         
-        playerLabel.setPosition(306, 224);
+        playerLabel.setPosition(312, 224);
         playerLabel.setSize(32, 16);
         playerLabel.setFontScale(0.6f);
+        playerLabel.setAlignment(Align.center);
         
-        diceLabel.setPosition(306, 158);
+        diceLabel.setPosition(302, 158);
         diceLabel.setFontScale(0.6f);
         diceLabel.setAlignment(Align.center);
         
@@ -183,11 +190,15 @@ public class MainScreen extends ScreenAdapter {
     	if(controller.isMouse1Down){
             Vector3 clickCoordinates = new Vector3(controller.mouseLocation,0);
             Vector3 position = camera.unproject(clickCoordinates);
-            // TO-DO : VERIFIER LA SELECTION, GARDER LE PION SUR LE CURSEUR, REPOSER LE PION SUR CASE VALIDE
+
             if(spriteDice.getBoundingRectangle().contains(position.x, position.y)) {
             	if(!this.system.diceThrown) {
                 	this.system.throwDice();
             	}
+            }
+            
+            if(nextTurnButton.getBoundingRectangle().contains(position.x, position.y)) {
+            	this.system.changeTurn();
             }
 
             if(this.system.moveDone == false) {
