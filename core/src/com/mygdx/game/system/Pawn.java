@@ -13,16 +13,18 @@ public class Pawn {
     public int raceEndPosition;
     public int racePosition = -1;
     public float[] stablePosition;
+    public float[][] ladderMatrix;
     public Boolean passed55 = false;
     public Boolean isInStable;
 
     
-    public Pawn(JeuDesPetitsChevaux parent, String pion, int start, int end, float[] stable) {
+    public Pawn(JeuDesPetitsChevaux parent, String pion, int start, int end, float[] stable, float[][] ladder) {
     	this.pionsAtlas = parent.assetManager.manager.get("pions/pions.pack", TextureAtlas.class);
         this.spritePion = new Sprite(pionsAtlas.findRegion(pion));
         this.raceStartPosition = start;
         this.raceEndPosition = end;
         this.stablePosition = stable;
+        this.ladderMatrix = ladder;
         this.isInStable = true;
         if(start == 0 ) {
         	passed55 = true;

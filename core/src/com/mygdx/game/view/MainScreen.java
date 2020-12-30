@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,8 +18,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
-import com.mygdx.game.OrthogonalTiledMapRendererWithSprites;
 import com.mygdx.game.controller.MouseKeyboardController;
+import com.mygdx.game.system.GameMap;
 import com.mygdx.game.system.JdpcSystem;
 import com.mygdx.game.system.Pawn;
 import com.mygdx.game.system.PossibleMove;
@@ -30,9 +29,8 @@ public class MainScreen extends ScreenAdapter {
 	private JeuDesPetitsChevaux parent;
 	private MouseKeyboardController controller;
 	
-    TiledMap tiledMap;
     OrthographicCamera camera;
-    OrthogonalTiledMapRendererWithSprites tiledMapRenderer;
+    public GameMap gameMap;
     
     Pawn rouge1;
     Pawn rouge2;
@@ -77,35 +75,34 @@ public class MainScreen extends ScreenAdapter {
         //AJOUT DU CONTROLLEUR
         controller = new MouseKeyboardController();
         
+        //=== CHARGEMENT DE LA CARTE ===
+        gameMap = new GameMap(new TmxMapLoader().load("carte.tmx"), 16);
+        
         //=== CHARGEMENT DES TEXTURES ===
         diceAtlas = parent.assetManager.manager.get("dice/dice.pack", TextureAtlas.class);
 		
         //=== CREATION DES SPRITES ===
-        rouge1 = new Pawn(this.parent,"Rouge1",0,55, new float[]{5,5});
-        rouge2 = new Pawn(this.parent,"Rouge2",0,55, new float[]{5,3});
-        bleu1 = new Pawn(this.parent,"Bleu1",14,13, new float[]{5,13});
-        bleu2 = new Pawn(this.parent,"Bleu2",14,13, new float[]{5,15});
-        pourpre1 = new Pawn(this.parent,"Pourpre1",28,27, new float[]{13,13});
-        pourpre2 = new Pawn(this.parent,"Pourpre2",28,27, new float[]{13,15});
-        vert1 = new Pawn(this.parent,"Vert1",42,41, new float[]{13,5});
-        vert2 = new Pawn(this.parent,"Vert2",42,41, new float[]{13,3});
+        rouge1 = new Pawn(this.parent,"Rouge1",0,55, new float[]{5,5}, GameMap.REDLADDERPOSITIONMATRIX);
+        rouge2 = new Pawn(this.parent,"Rouge2",0,55, new float[]{5,3}, GameMap.REDLADDERPOSITIONMATRIX);
+        bleu1 = new Pawn(this.parent,"Bleu1",14,13, new float[]{5,13}, GameMap.BLUELADDERPOSITIONMATRIX);
+        bleu2 = new Pawn(this.parent,"Bleu2",14,13, new float[]{5,15}, GameMap.BLUELADDERPOSITIONMATRIX);
+        pourpre1 = new Pawn(this.parent,"Pourpre1",28,27, new float[]{13,13}, GameMap.PURPLELADDERPOSITIONMATRIX);
+        pourpre2 = new Pawn(this.parent,"Pourpre2",28,27, new float[]{13,15}, GameMap.PURPLELADDERPOSITIONMATRIX);
+        vert1 = new Pawn(this.parent,"Vert1",42,41, new float[]{13,5}, GameMap.GREENLADDERPOSITIONMATRIX);
+        vert2 = new Pawn(this.parent,"Vert2",42,41, new float[]{13,3}, GameMap.GREENLADDERPOSITIONMATRIX);
    
         spriteDice = new Sprite(diceAtlas.findRegion("Dice6"));
         
-        //=== CHARGEMENT DE LA CARTE ===
-        tiledMap = new TmxMapLoader().load("carte.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap);
-        
         //=== AJOUT DES SPRITES SUR LA CARTE ===
-        tiledMapRenderer.addSprite(rouge1.spritePion);
-        tiledMapRenderer.addSprite(rouge2.spritePion);
-        tiledMapRenderer.addSprite(vert1.spritePion);
-        tiledMapRenderer.addSprite(vert2.spritePion);
-        tiledMapRenderer.addSprite(bleu1.spritePion);
-        tiledMapRenderer.addSprite(bleu2.spritePion);
-        tiledMapRenderer.addSprite(pourpre1.spritePion);
-        tiledMapRenderer.addSprite(pourpre2.spritePion);
-        tiledMapRenderer.addSprite(spriteDice);
+        gameMap.tiledMapRenderer.addSprite(rouge1.spritePion);
+        gameMap.tiledMapRenderer.addSprite(rouge2.spritePion);
+        gameMap.tiledMapRenderer.addSprite(vert1.spritePion);
+        gameMap.tiledMapRenderer.addSprite(vert2.spritePion);
+        gameMap.tiledMapRenderer.addSprite(bleu1.spritePion);
+        gameMap.tiledMapRenderer.addSprite(bleu2.spritePion);
+        gameMap.tiledMapRenderer.addSprite(pourpre1.spritePion);
+        gameMap.tiledMapRenderer.addSprite(pourpre2.spritePion);
+        gameMap.tiledMapRenderer.addSprite(spriteDice);
         
         //=== POSITIONNEMENT DES SPRITES SUR LA CARTE ===
         rouge1.setToStablePosition();
@@ -263,8 +260,8 @@ public class MainScreen extends ScreenAdapter {
     	}
     	
         camera.update();
-        tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
+        gameMap.tiledMapRenderer.setView(camera);
+        gameMap.tiledMapRenderer.render();
         
         stage.act();
         stage.draw();
@@ -306,28 +303,12 @@ public class MainScreen extends ScreenAdapter {
 		this.controller = controller;
 	}
 
-	public TiledMap getTiledMap() {
-		return tiledMap;
-	}
-
-	public void setTiledMap(TiledMap tiledMap) {
-		this.tiledMap = tiledMap;
-	}
-
 	public OrthographicCamera getCamera() {
 		return camera;
 	}
 
 	public void setCamera(OrthographicCamera camera) {
 		this.camera = camera;
-	}
-
-	public OrthogonalTiledMapRendererWithSprites getTiledMapRenderer() {
-		return tiledMapRenderer;
-	}
-
-	public void setTiledMapRenderer(OrthogonalTiledMapRendererWithSprites tiledMapRenderer) {
-		this.tiledMapRenderer = tiledMapRenderer;
 	}
 
 	public Sprite getSpriteDice() {

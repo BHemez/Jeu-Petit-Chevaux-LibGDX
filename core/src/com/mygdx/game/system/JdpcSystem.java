@@ -14,18 +14,12 @@ public class JdpcSystem {
 	public Boolean moveDone = false;
 
 	private MainScreen screen;
+		
 	
-	private static final float[][] POSITIONMATRIX = new float[][]
-		{
-			{7,7,7,7,7,7,7,6,5,4,3,2,1,1,1,2,3,4,5,6,7,7,7,7,7,7,7,9,11,11,11,11,11,11,11,12,13,14,15,16,17,17,17,16,15,14,13,12,11,11,11,11,11,11,11,9,0,0,0,0,0,0,0},	//Position X des cases
-			{1,2,3,4,5,6,7,7,7,7,7,7,7,9,11,11,11,11,11,11,11,12,13,14,15,16,17,17,17,16,15,14,13,12,11,11,11,11,11,11,11,9,7,7,7,7,7,7,7,6,5,4,3,2,1,0,0,0,0,0,0,0}	//position Y des cases
-		};
-
-	
-
 	public JdpcSystem(MainScreen scrn) {
 		this.screen = scrn;
 	}
+	
 	
 	public void changeTurn() {
 		if (checkForEndTurnCondition()){
@@ -65,7 +59,7 @@ public class JdpcSystem {
 	
 	public void movePawn(Pawn pawn, int position) {		
 		pawn.racePosition = position;
-		pawn.setPosition(POSITIONMATRIX[0][pawn.racePosition]*16, POSITIONMATRIX[1][pawn.racePosition]*16);
+		pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
 		this.moveDone = true;
 		checkForCollision();
 		unShowPossibleMove();
@@ -73,7 +67,7 @@ public class JdpcSystem {
 	
 	public void movePawnToStart(Pawn pawn) {
 		
-		pawn.setPosition(POSITIONMATRIX[0][pawn.raceStartPosition]*16, POSITIONMATRIX[1][pawn.raceStartPosition]*16);
+		pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceStartPosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.raceStartPosition]*GameMap.TILESIZE);
 		pawn.isInStable = false;
 		pawn.racePosition = pawn.raceStartPosition;
 		this.moveDone = true;
@@ -84,22 +78,26 @@ public class JdpcSystem {
 	public void showPossibleMove(Pawn pawn) {
 		screen.selectedPawn.setPosition(pawn.spritePion.getX(),pawn.spritePion.getY());
 		screen.selectedPawn.setVisible(true);
+
 		if(diceThrown == true) {
-			if(pawn.isInStable) {
+			if(pawn.racePosition == pawn.raceEndPosition && this.diceValue == 1) {
+				screen.possibleMove.setVisible(true);
+				screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][0]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][0]*GameMap.TILESIZE);
+			} else if(pawn.isInStable) {
 				if(this.diceValue == 6 && this.diceThrown) {
 					screen.possibleMove.setVisible(true);
-					screen.possibleMove.setPosition(POSITIONMATRIX[0][pawn.raceStartPosition]*16, POSITIONMATRIX[1][pawn.raceStartPosition]*16);
+					screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceStartPosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.raceStartPosition]*GameMap.TILESIZE);
 				}
 			} else if((pawn.racePosition + this.diceValue >= pawn.raceEndPosition) && pawn.passed55 == true) {
 				screen.possibleMove.setVisible(true);
-				screen.possibleMove.setPosition(POSITIONMATRIX[0][pawn.raceEndPosition]*16, POSITIONMATRIX[1][pawn.raceEndPosition]*16);
+				screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceEndPosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.raceEndPosition]*GameMap.TILESIZE);
 			} else if(pawn.racePosition + this.diceValue > 55) {
 				screen.possibleMove.setVisible(true);
-				screen.possibleMove.setPosition(POSITIONMATRIX[0][pawn.racePosition + this.diceValue -55]*16,POSITIONMATRIX[1][pawn.racePosition + this.diceValue -55]*16);
+				screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition + this.diceValue -55]*GameMap.TILESIZE,GameMap.POSITIONMATRIX[1][pawn.racePosition + this.diceValue -55]*GameMap.TILESIZE);
 
 			} else {
 				screen.possibleMove.setVisible(true);
-				screen.possibleMove.setPosition(POSITIONMATRIX[0][pawn.racePosition + this.diceValue]*16,POSITIONMATRIX[1][pawn.racePosition + this.diceValue]*16);
+				screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition + this.diceValue]*GameMap.TILESIZE,GameMap.POSITIONMATRIX[1][pawn.racePosition + this.diceValue]*GameMap.TILESIZE);
 			} 
 		}
 		
@@ -133,20 +131,20 @@ public class JdpcSystem {
 
 	public void setToCorrectPosition(Pawn pawn) {
 		if(pawn.isInStable) {
-			if(this.diceValue == 6 && this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(POSITIONMATRIX[0][pawn.raceStartPosition]*16+8, POSITIONMATRIX[1][pawn.raceStartPosition]*16+8)) {
+			if(this.diceValue == 6 && this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][pawn.raceStartPosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][pawn.raceStartPosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
 				movePawnToStart(pawn);
 			} else {
 				pawn.setPosition(pawn.stablePosition[0]*16,pawn.stablePosition[1]*16);
 			}
-		} else if((pawn.racePosition + this.diceValue >= pawn.raceEndPosition)&& pawn.passed55 == true && this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(POSITIONMATRIX[0][pawn.raceEndPosition]*16+8, POSITIONMATRIX[1][pawn.raceEndPosition]*16+8)) {
+		} else if((pawn.racePosition + this.diceValue >= pawn.raceEndPosition)&& pawn.passed55 == true && this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][pawn.raceEndPosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][pawn.raceEndPosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
 			movePawn(pawn, pawn.raceEndPosition);
-		} else if(( pawn.racePosition + this.diceValue > 55) && this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(POSITIONMATRIX[0][pawn.racePosition + this.diceValue-55]*16+8, POSITIONMATRIX[1][pawn.racePosition + this.diceValue -55]*16+8)) {
+		} else if(( pawn.racePosition + this.diceValue > 55) && this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][pawn.racePosition + this.diceValue-55]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][pawn.racePosition + this.diceValue -55]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
 			pawn.passed55 = true;
 			movePawn(pawn, pawn.racePosition+this.diceValue-55);
-		} else if(this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(POSITIONMATRIX[0][pawn.racePosition + this.diceValue]*16+8, POSITIONMATRIX[1][pawn.racePosition + this.diceValue]*16+8)){
+		} else if(this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][pawn.racePosition + this.diceValue]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][pawn.racePosition + this.diceValue]*GameMap.TILESIZE+(GameMap.TILESIZE/2))){
 			movePawn(pawn, pawn.racePosition+this.diceValue);
 		} else {
-			pawn.setPosition(POSITIONMATRIX[0][pawn.racePosition]*16, POSITIONMATRIX[1][pawn.racePosition]*16);
+			pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
 		}
 	}
 
