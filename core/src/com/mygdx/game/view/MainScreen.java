@@ -96,27 +96,17 @@ public class MainScreen extends ScreenAdapter {
         nextTurnButton = new Sprite(buttonAtlas.findRegion("NextTurnButton"));
         
         //=== AJOUT DES SPRITES SUR LA CARTE ===
-        gameMap.tiledMapRenderer.addSprite(pawnList.get(0).spritePion);
-        gameMap.tiledMapRenderer.addSprite(pawnList.get(1).spritePion);
-        gameMap.tiledMapRenderer.addSprite(pawnList.get(2).spritePion);
-        gameMap.tiledMapRenderer.addSprite(pawnList.get(3).spritePion);
-        gameMap.tiledMapRenderer.addSprite(pawnList.get(4).spritePion);
-        gameMap.tiledMapRenderer.addSprite(pawnList.get(5).spritePion);
-        gameMap.tiledMapRenderer.addSprite(pawnList.get(6).spritePion);
-        gameMap.tiledMapRenderer.addSprite(pawnList.get(7).spritePion);
+        for(Pawn p : pawnList) {
+        	gameMap.tiledMapRenderer.addSprite(p.spritePion);
+        }
         gameMap.tiledMapRenderer.addSprite(spriteDice);
         gameMap.tiledMapRenderer.addSprite(playerIcon);
         gameMap.tiledMapRenderer.addSprite(nextTurnButton);
         
         //=== POSITIONNEMENT DES SPRITES SUR LA CARTE ===
-        pawnList.get(0).setToStablePosition();
-        pawnList.get(1).setToStablePosition();
-        pawnList.get(2).setToStablePosition();
-        pawnList.get(3).setToStablePosition();
-        pawnList.get(4).setToStablePosition();
-        pawnList.get(5).setToStablePosition();
-        pawnList.get(6).setToStablePosition();
-        pawnList.get(7).setToStablePosition();
+        for(Pawn p : pawnList) {
+        	p.setToStablePosition();
+        }
         spriteDice.setPosition(320,176);
         playerIcon.setPosition(304, 240);
         nextTurnButton.setPosition(304, 112);
