@@ -22,7 +22,6 @@ public class JdpcSystem {
 		this.screen = scrn;
 	}
 	
-	
 	public void changeTurn() {
 		if (checkForEndTurnCondition()){
 			if(this.playerTurn >= this.numberOfPlayer ) {
@@ -73,7 +72,7 @@ public class JdpcSystem {
 		return diceValue;
 	}
 	
-	public void movePawn(Pawn pawn, int position, int ladderPosition) {		
+	public void movePawn(Pawn pawn, int position, int ladderPosition) {	
 		pawn.racePosition = position;
 		pawn.ladderPosition = ladderPosition+1;
 		if(position != -1) {
@@ -129,7 +128,7 @@ public class JdpcSystem {
 		boolean movePossible = false;
 		
 		ArrayList<Pawn> otherPawnList = new ArrayList<Pawn>(screen.pawnList);
-		for(int i =0; i<otherPawnList.size(); i++) {
+		for(int i=0; i<otherPawnList.size(); i++) {
 			if(otherPawnList.get(i).equals(pawn))
 			otherPawnList.remove(i);
 		}

@@ -180,16 +180,14 @@ public class MainScreen extends ScreenAdapter {
             Vector3 position = camera.unproject(clickCoordinates);
 
             if(spriteDice.getBoundingRectangle().contains(position.x, position.y)) {
-            	if(!this.system.diceThrown) {
-                	this.system.throwDice();
-            	}
+                this.system.throwDice();
             }
             
             if(nextTurnButton.getBoundingRectangle().contains(position.x, position.y)) {
             	this.system.changeTurn();
             }
 
-            if(this.system.moveDone == false) {
+            if(this.system.moveDone == false && this.system.diceThrown) {
             	boolean pFound = false;
             	
             	for(Pawn p : pawnList) {
@@ -214,7 +212,7 @@ public class MainScreen extends ScreenAdapter {
     	if(controller.isDragged) {
     		 Vector3 dragCoordinates = new Vector3(controller.mouseLocation,0);
              Vector3 position = camera.unproject(dragCoordinates);
-             if(this.system.moveDone == false) {
+             if(this.system.moveDone == false && this.system.diceThrown) {
              	for(Pawn p : pawnList) {
              		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) && p.team == system.playerTurn && (this.draggedID == p.id || this.draggedID == 0)) {
              			p.setPosition(position.x-(GameMap.TILESIZE/2), position.y-(GameMap.TILESIZE/2));
