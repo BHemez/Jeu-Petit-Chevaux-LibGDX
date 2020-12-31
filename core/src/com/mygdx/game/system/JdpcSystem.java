@@ -1,5 +1,6 @@
 package com.mygdx.game.system;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.mygdx.game.JeuDesPetitsChevaux;
@@ -77,58 +78,153 @@ public class JdpcSystem {
 		pawn.ladderPosition = ladderPosition+1;
 		if(position != -1) {
 			pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
+			checkUnder(pawn, false);
 		} else {
 			pawn.setPosition(pawn.ladderMatrix[0][ladderPosition]*GameMap.TILESIZE, pawn.ladderMatrix[1][ladderPosition]*GameMap.TILESIZE);
+			checkUnder(pawn, true);
 		}
 		this.moveDone = true;
-		checkForCollision();
 		unShowPossibleMove();
 	}
-	
+
+
 	public void movePawnToStart(Pawn pawn) {
 		pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceStartPosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.raceStartPosition]*GameMap.TILESIZE);
 		pawn.isInStable = false;
 		pawn.racePosition = pawn.raceStartPosition;
 		this.moveDone = true;
-		checkForCollision();
 		unShowPossibleMove();
 	}
-	
-	public void showPossibleMove(Pawn pawn) {
-		screen.selectedPawn.setPosition(pawn.spritePion.getX(),pawn.spritePion.getY());
-		screen.selectedPawn.setVisible(true);
 
-		if(diceThrown == true) {
-			if(pawn.racePosition == pawn.raceEndPosition) {
-				if(this.diceValue == 1) {
-					screen.possibleMove.setVisible(true);
-					screen.possibleMove.setPosition(pawn.ladderMatrix[0][0]*GameMap.TILESIZE, pawn.ladderMatrix[1][0]*GameMap.TILESIZE);
-				}
-			} else if(pawn.ladderPosition >= 1 && pawn.ladderPosition <= 5) {
-				if(this.diceValue == pawn.ladderPosition+1) {
-					screen.possibleMove.setVisible(true);
-					screen.possibleMove.setPosition(pawn.ladderMatrix[0][this.diceValue-1]*GameMap.TILESIZE, pawn.ladderMatrix[1][this.diceValue-1]*GameMap.TILESIZE);
-				}
-		    } else if(pawn.ladderPosition == 6 && this.diceValue == 6) {
-		    	screen.possibleMove.setVisible(true);
-		    	screen.possibleMove.setPosition(pawn.ladderMatrix[0][6]*GameMap.TILESIZE, pawn.ladderMatrix[1][6]*GameMap.TILESIZE);
-			} else if(pawn.isInStable) {
-				if(this.diceValue == 6 && this.diceThrown) {
-					screen.possibleMove.setVisible(true);
-					screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceStartPosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.raceStartPosition]*GameMap.TILESIZE);
-				}
-			} else if((pawn.racePosition + this.diceValue >= pawn.raceEndPosition) && pawn.passed55 == true) {
-				screen.possibleMove.setVisible(true);
-				screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceEndPosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.raceEndPosition]*GameMap.TILESIZE);
-			} else if(pawn.racePosition + this.diceValue > 55) {
-				screen.possibleMove.setVisible(true);
-				screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition + this.diceValue -55]*GameMap.TILESIZE,GameMap.POSITIONMATRIX[1][pawn.racePosition + this.diceValue -55]*GameMap.TILESIZE);
-			} else {
-				screen.possibleMove.setVisible(true);
-				screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition + this.diceValue]*GameMap.TILESIZE,GameMap.POSITIONMATRIX[1][pawn.racePosition + this.diceValue]*GameMap.TILESIZE);
-			} 
+	private void checkUnder(Pawn pawnAbove, Boolean moveInLadder) {
+		boolean found = false;
+		
+		ArrayList<Pawn> otherPawnList = new ArrayList<Pawn>(screen.pawnList);
+		for(int i =0; i<otherPawnList.size(); i++) {
+			if(otherPawnList.get(i).equals(pawnAbove))
+			otherPawnList.remove(i);
 		}
 		
+		for(Pawn p : otherPawnList) {
+			
+			if(found) {
+				break;
+			} else if(p.ladderPosition == pawnAbove.ladderPosition && moveInLadder) {
+				found = true;
+				p.setToStablePosition();
+			} else if(p.racePosition == pawnAbove.racePosition && !moveInLadder) {
+				found = true;
+				p.setToStablePosition();
+			}
+		}
+		
+	}
+	
+	public boolean findPossibleMove(Pawn pawn, boolean animate, boolean isSettingPosition) {
+		if(animate) {
+			screen.selectedPawn.setPosition(pawn.spritePion.getX(),pawn.spritePion.getY());
+			screen.selectedPawn.setVisible(true);
+		}
+
+		boolean movePossible = false;
+		
+		ArrayList<Pawn> otherPawnList = new ArrayList<Pawn>(screen.pawnList);
+		for(int i =0; i<otherPawnList.size(); i++) {
+			if(otherPawnList.get(i).equals(pawn))
+			otherPawnList.remove(i);
+		}
+		
+		int futurePosition = pawn.racePosition;
+		boolean moveInLadder = false;
+		
+		if(pawn.racePosition == pawn.raceEndPosition) {
+			if(this.diceValue == 1) {
+				moveInLadder = true;
+				futurePosition = 0;
+				movePossible = true;
+			}
+		} else if(pawn.ladderPosition >= 1 && pawn.ladderPosition <= 5) {
+			if(this.diceValue == pawn.ladderPosition+1) {
+				moveInLadder = true;
+				futurePosition = this.diceValue-1;
+				movePossible = true;
+			}
+	    } else if(pawn.ladderPosition == 6 && this.diceValue == 6) {
+			moveInLadder = true;
+			futurePosition = 6;
+			movePossible = true;
+		} else if(pawn.isInStable) {
+			if(this.diceValue == 6 && this.diceThrown) {
+				futurePosition = pawn.raceStartPosition;
+				movePossible = true;
+			}
+		} else {
+			int direction = 1;
+			int distanceLeft = this.diceValue;
+			
+			while(distanceLeft > 0) {
+				distanceLeft -=1;
+				futurePosition += direction;
+				if(futurePosition == 56) {
+					futurePosition = 0;
+					pawn.passed55 = true;
+				} else if(futurePosition == -1) {
+					futurePosition = 55;
+					pawn.passed55 = false;
+				}
+				
+				boolean found = false;
+				for(Pawn p : otherPawnList) {
+					if(found) {
+						break;
+					} else if( p.racePosition == futurePosition || (pawn.raceEndPosition == futurePosition && pawn.passed55)) {
+						found = true;
+						direction *= -1;
+					}
+				}
+			}
+			movePossible = true;
+		}
+		
+		if(animate) {
+			if(movePossible) {
+				if(moveInLadder) {
+					screen.possibleMove.setVisible(true);
+					screen.possibleMove.setPosition(pawn.ladderMatrix[0][futurePosition]*GameMap.TILESIZE,pawn.ladderMatrix[1][futurePosition]*GameMap.TILESIZE);
+				} else {
+					screen.possibleMove.setVisible(true);
+					screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][futurePosition]*GameMap.TILESIZE,GameMap.POSITIONMATRIX[1][futurePosition]*GameMap.TILESIZE);
+				}
+			} else {
+				screen.possibleMove.setVisible(false);
+			}
+
+		} else if(isSettingPosition) {
+			if(moveInLadder) {
+				if(movePossible && pawn.spritePion.getBoundingRectangle().contains(pawn.ladderMatrix[0][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), pawn.ladderMatrix[1][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
+					movePawn(pawn, -1, futurePosition);
+					if(futurePosition == 6) {
+						triggerVictory();
+					}
+				} else {
+					pawn.setPosition(pawn.ladderMatrix[0][pawn.ladderPosition]*GameMap.TILESIZE, pawn.ladderMatrix[1][pawn.ladderPosition]*GameMap.TILESIZE);
+				}
+			} else {
+				if(movePossible && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
+					if(pawn.isInStable && futurePosition == pawn.raceStartPosition) {
+						movePawnToStart(pawn);
+					} else {
+						movePawn(pawn, futurePosition, -1);
+					}
+				} else if(pawn.isInStable) {
+					pawn.setPosition(pawn.stablePosition[0]*GameMap.TILESIZE,pawn.stablePosition[1]*GameMap.TILESIZE);
+				} else {
+					pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
+				}
+			}	
+		}
+		
+		return movePossible;
 	}
 	
 	public void unShowPossibleMove() {
@@ -148,59 +244,14 @@ public class JdpcSystem {
 	}
 	
 	private boolean checkForPossibleMove() {
-		//True if moves are possible
-		return false;
-	}
-	
-	private boolean checkForCollision() {
-		//TO-DO ecrase chevaux si besoin
+		for(Pawn p : screen.pawnList) {
+			if(p.team == this.playerTurn && findPossibleMove(p,false, false)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
-	public void setToCorrectPosition(Pawn pawn) {
-		boolean positionned = false;
-		
-		if(pawn.racePosition == pawn.raceEndPosition && !positionned) {
-			if(this.diceValue == 1 && pawn.spritePion.getBoundingRectangle().contains(pawn.ladderMatrix[0][0]*GameMap.TILESIZE+(GameMap.TILESIZE/2), pawn.ladderMatrix[1][0]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
-				movePawn(pawn, -1, 0);
-			} else {
-				pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceEndPosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.raceEndPosition]*GameMap.TILESIZE);
-			}
-			positionned = true;
-		} else if(pawn.ladderPosition >= 1 && pawn.ladderPosition <= 5 && !positionned) {
-			if(this.diceValue == pawn.ladderPosition+1 && pawn.spritePion.getBoundingRectangle().contains(pawn.ladderMatrix[0][this.diceValue-1]*GameMap.TILESIZE+(GameMap.TILESIZE/2), pawn.ladderMatrix[1][this.diceValue-1]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
-				movePawn(pawn, -1, this.diceValue-1);
-			} else {
-				pawn.setPosition(pawn.ladderMatrix[0][pawn.ladderPosition-1]*GameMap.TILESIZE, pawn.ladderMatrix[1][pawn.ladderPosition-1]*GameMap.TILESIZE );
-			}
-			positionned = true;
-		} else if(pawn.ladderPosition == 6 && this.diceValue == 6 && pawn.spritePion.getBoundingRectangle().contains(pawn.ladderMatrix[0][6]*GameMap.TILESIZE+(GameMap.TILESIZE/2), pawn.ladderMatrix[1][6]*GameMap.TILESIZE+(GameMap.TILESIZE/2)) && !positionned) {
-				movePawn(pawn, -1, 6);
-				triggerVictory();
-				positionned = true;
-	    } else if(pawn.isInStable && !positionned) {
-			if(this.diceValue == 6 && this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][pawn.raceStartPosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][pawn.raceStartPosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
-				movePawnToStart(pawn);
-			} else {
-				pawn.setPosition(pawn.stablePosition[0]*16,pawn.stablePosition[1]*16);
-			}
-			positionned = true;
-		} else if((pawn.racePosition + this.diceValue >= pawn.raceEndPosition)&& pawn.passed55 == true && this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][pawn.raceEndPosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][pawn.raceEndPosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2)) && !positionned) {
-			movePawn(pawn, pawn.raceEndPosition, -1);
-			positionned = true;
-		} else if(( pawn.racePosition + this.diceValue > 55) && this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][pawn.racePosition + this.diceValue-55]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][pawn.racePosition + this.diceValue -55]*GameMap.TILESIZE+(GameMap.TILESIZE/2)) && !positionned) {
-			pawn.passed55 = true;
-			movePawn(pawn, pawn.racePosition+this.diceValue-55, -1);
-			positionned = true;
-		} else if(this.diceThrown && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][pawn.racePosition + this.diceValue]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][pawn.racePosition + this.diceValue]*GameMap.TILESIZE+(GameMap.TILESIZE/2))){
-			movePawn(pawn, pawn.racePosition+this.diceValue, -1);
-			positionned = true;
-		} else if(!positionned) {
-			pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
-			positionned = true;
-		}
-	}
-	
 	private void triggerVictory() {
 		System.out.println("VICTORY : Player "+ this.playerTurn);
 		this.screen.parent.changeScreen(JeuDesPetitsChevaux.ENDGAME);
