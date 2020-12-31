@@ -63,7 +63,7 @@ public class JdpcSystem {
 		if(!diceThrown || (diceThrown && diceValue == 6 && moveDone)) {
 			this.diceValue = new Random().nextInt(6)+1;
 			//AJOUTER ANIMATION / FEEDBACK SONORE
-			this.screen.getSpriteDice().setRegion(this.screen.getDiceAtlas().findRegion("Dice"+Integer.toString(diceValue)));
+			this.screen.spriteDice.setRegion(this.screen.diceAtlas.findRegion("Dice"+Integer.toString(diceValue)));
 			this.diceThrown = true;
 			this.moveDone = false;
 			screen.diceLabel.setText(""+diceValue);
@@ -203,7 +203,7 @@ public class JdpcSystem {
 	
 	private void triggerVictory() {
 		System.out.println("VICTORY : Player "+ this.playerTurn);
-		this.screen.getParent().changeScreen(JeuDesPetitsChevaux.ENDGAME);
+		this.screen.parent.changeScreen(JeuDesPetitsChevaux.ENDGAME);
 	}
 
 }

@@ -8,6 +8,7 @@ public class Pawn {
 
     private TextureAtlas pionsAtlas;
     public Sprite spritePion;
+    public int team;
     
     public int raceStartPosition;
     public int raceEndPosition;
@@ -19,7 +20,8 @@ public class Pawn {
     public Boolean isInStable;
 
 
-    public Pawn(JeuDesPetitsChevaux parent, String pion, int start, int end, float[] stable, float[][] ladder) {
+    public Pawn(JeuDesPetitsChevaux parent, int team, String pion, int start, int end, float[] stable, float[][] ladder) {
+    	this.team = team;
     	this.pionsAtlas = parent.assetManager.manager.get("pions/pions.pack", TextureAtlas.class);
         this.spritePion = new Sprite(pionsAtlas.findRegion(pion));
         this.raceStartPosition = start;
