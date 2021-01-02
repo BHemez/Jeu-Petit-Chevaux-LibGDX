@@ -75,18 +75,18 @@ public class JdpcSystem {
 		return diceValue;
 	}
 	
-	public void movePawn(Pawn pawn, int position, int ladderPosition) {
+	public void movePawn(Pawn pawn, int position, int ladPosition) {
 		int oldPosition = pawn.racePosition;
 		pawn.racePosition = position;
 		int oldLadderPosition = pawn.ladderPosition;
-		pawn.ladderPosition = ladderPosition+1;
-		if(position != -1) {
+		pawn.ladderPosition = ladPosition;
+		if(position != -2) {
 			pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
 			checkUnder(pawn);
 			System.out.println("Moved "+pawn.team+"-"+pawn.id+" from "+oldPosition +" to "+position);
 		} else {
-			pawn.setPosition(pawn.ladderMatrix[0][ladderPosition]*GameMap.TILESIZE, pawn.ladderMatrix[1][ladderPosition]*GameMap.TILESIZE);
-			System.out.println("Moved "+pawn.team+"-"+pawn.id+" from "+oldLadderPosition +" to "+ladderPosition);
+			pawn.setPosition(pawn.ladderMatrix[0][ladPosition]*GameMap.TILESIZE, pawn.ladderMatrix[1][ladPosition]*GameMap.TILESIZE);
+			System.out.println("Moved "+pawn.team+"-"+pawn.id+" from "+oldLadderPosition +" to "+ladPosition);
 		}
 		this.moveDone = true;
 		unShowPossibleMove();
@@ -136,16 +136,18 @@ public class JdpcSystem {
 				futurePosition = 0;
 				movePossible = true;
 			}
-		} else if(pawn.ladderPosition >= 1 && pawn.ladderPosition <= 5) {
-			if(this.diceValue == pawn.ladderPosition+1) {
+		} else if(pawn.ladderPosition >= 0 && pawn.ladderPosition < 5) {
+			if(this.diceValue == pawn.ladderPosition+2) {
 				moveInLadder = true;
-				futurePosition = this.diceValue-1;
+				futurePosition = pawn.ladderPosition+1;
 				movePossible = true;
 			}
-	    } else if(pawn.ladderPosition == 6 && this.diceValue == 6) {
-			moveInLadder = true;
-			futurePosition = 6;
-			movePossible = true;
+	    } else if(pawn.ladderPosition == 5) {
+	    	if(this.diceValue == 6) {
+				moveInLadder = true;
+				futurePosition = 6;
+				movePossible = true;
+	    	}
 		} else if(pawn.isInStable) {
 			if(this.diceValue == 6 && this.diceThrown) {
 				futurePosition = pawn.raceStartPosition;
@@ -200,24 +202,24 @@ public class JdpcSystem {
 		} else if(isSettingPosition) {
 			if(moveInLadder) {
 				if(movePossible && pawn.spritePion.getBoundingRectangle().contains(pawn.ladderMatrix[0][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), pawn.ladderMatrix[1][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
-					movePawn(pawn, -1, futurePosition);
+					movePawn(pawn, -2, futurePosition);
 					if(futurePosition == 6) {
 						triggerVictory();
 					}
-				} else {
-					pawn.setPosition(pawn.ladderMatrix[0][pawn.ladderPosition]*GameMap.TILESIZE, pawn.ladderMatrix[1][pawn.ladderPosition]*GameMap.TILESIZE);
 				}
 			} else {
 				if(movePossible && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
 					if(pawn.isInStable && futurePosition == pawn.raceStartPosition) {
 						movePawnToStart(pawn);
 					} else {
-						movePawn(pawn, futurePosition, -1);
+						movePawn(pawn, futurePosition, -2);
 					}
 				} else if(pawn.isInStable) {
 					pawn.setPosition(pawn.stablePosition[0]*GameMap.TILESIZE,pawn.stablePosition[1]*GameMap.TILESIZE);
-				} else {
+				} else if(pawn.racePosition != -2){
 					pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
+				} else if(pawn.ladderPosition != -2){
+					pawn.setPosition(pawn.ladderMatrix[0][pawn.ladderPosition]*GameMap.TILESIZE, pawn.ladderMatrix[1][pawn.ladderPosition]*GameMap.TILESIZE);//TRIGGER TROP TOT
 				}
 			}	
 		}
@@ -271,4 +273,9 @@ public class JdpcSystem {
 		return position;
 	}
 	
+	public void cheat(Pawn pawn) {
+		movePawnToStart(pawn);
+		movePawn(pawn, pawn.raceEndPosition, -2);
+		pawn.passed55 = true;
+	}
 }

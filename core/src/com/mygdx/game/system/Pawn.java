@@ -13,11 +13,11 @@ public class Pawn {
     
     public int raceStartPosition;
     public int raceEndPosition;
-    public int racePosition = -1;
-    public int ladderPosition = -1;
+    public int racePosition = -2;
+    public int ladderPosition = -2;
     public float[] stablePosition;
     public float[][] ladderMatrix;
-    public Boolean passed55 = false;
+    public Boolean passed55;
     public Boolean isInStable;
 
 
@@ -33,6 +33,8 @@ public class Pawn {
         this.isInStable = true;
         if(start == 0 ) {
         	passed55 = true;
+        } else {
+        	passed55 = false;
         }
     }
     

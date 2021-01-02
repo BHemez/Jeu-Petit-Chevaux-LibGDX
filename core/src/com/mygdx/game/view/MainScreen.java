@@ -184,7 +184,8 @@ public class MainScreen extends ScreenAdapter {
             }
             
             if(nextTurnButton.getBoundingRectangle().contains(position.x, position.y)) {
-            	this.system.changeTurn();
+            	//this.system.changeTurn();
+            	this.system.cheat(pawnList.get(0));
             }
 
             if(this.system.moveDone == false && this.system.diceThrown) {
@@ -217,8 +218,6 @@ public class MainScreen extends ScreenAdapter {
              		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) && p.team == system.playerTurn && (this.draggedID == p.id || this.draggedID == 0)) {
              			p.setPosition(position.x-(GameMap.TILESIZE/2), position.y-(GameMap.TILESIZE/2));
              			this.draggedID = p.id;
-             		} else {
-             			this.system.findPossibleMove(p, false, true);
              		}
              	}   
              }
