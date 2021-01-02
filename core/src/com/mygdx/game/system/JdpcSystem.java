@@ -102,11 +102,7 @@ public class JdpcSystem {
 	private void checkUnder(Pawn pawnAbove, Boolean moveInLadder) {
 		boolean found = false;
 		
-		ArrayList<Pawn> otherPawnList = new ArrayList<Pawn>(screen.pawnList);
-		for(int i =0; i<otherPawnList.size(); i++) {
-			if(otherPawnList.get(i).equals(pawnAbove))
-			otherPawnList.remove(i);
-		}
+		ArrayList<Pawn> otherPawnList = getOtherPawnList(pawnAbove, screen.pawnList);
 		
 		for(Pawn p : otherPawnList) {
 			
@@ -126,11 +122,7 @@ public class JdpcSystem {
 	public boolean findPossibleMove(Pawn pawn, boolean animate, boolean isSettingPosition) {
 		boolean movePossible = false;
 		
-		ArrayList<Pawn> otherPawnList = new ArrayList<Pawn>(screen.pawnList);
-		for(int i=0; i<otherPawnList.size(); i++) {
-			if(otherPawnList.get(i).equals(pawn))
-			otherPawnList.remove(i);
-		}
+		ArrayList<Pawn> otherPawnList = getOtherPawnList(pawn, screen.pawnList);
 		
 		int futurePosition = pawn.racePosition;
 		boolean moveInLadder = false;
@@ -256,4 +248,12 @@ public class JdpcSystem {
 		this.screen.parent.changeScreen(JeuDesPetitsChevaux.ENDGAME);
 	}
 
+	private ArrayList<Pawn> getOtherPawnList(Pawn pawn, ArrayList<Pawn> list) {
+		ArrayList<Pawn> otherPawnList = new ArrayList<Pawn>(list);
+		for(int i =0; i<otherPawnList.size(); i++) {
+			if(otherPawnList.get(i).equals(pawn))
+			otherPawnList.remove(i);
+		}
+		return otherPawnList;
+	}
 }
