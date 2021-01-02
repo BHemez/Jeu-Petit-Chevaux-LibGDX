@@ -218,7 +218,7 @@ public class MainScreen extends ScreenAdapter {
              			p.setPosition(position.x-(GameMap.TILESIZE/2), position.y-(GameMap.TILESIZE/2));
              			this.draggedID = p.id;
              		} else {
-             			this.system.findPossibleMove(p, false, true); 
+             			this.system.findPossibleMove(p, false, true);
              		}
              	}   
              }
@@ -227,7 +227,7 @@ public class MainScreen extends ScreenAdapter {
     	//IS NOT DRAGGED
     		this.draggedID = 0;
          	for(Pawn p : pawnList) { 
-         		this.system.findPossibleMove(p, false, true); 
+         		this.system.findPossibleMove(p, false, true);
          	}
     	}
     	
