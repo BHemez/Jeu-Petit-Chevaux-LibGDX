@@ -92,6 +92,7 @@ public class JdpcSystem {
 		pawn.isInStable = false;
 		pawn.racePosition = pawn.raceStartPosition;
 		this.moveDone = true;
+		checkUnder(pawn, false);
 		unShowPossibleMove();
 	}
 
@@ -120,11 +121,6 @@ public class JdpcSystem {
 	}
 	
 	public boolean findPossibleMove(Pawn pawn, boolean animate, boolean isSettingPosition) {
-		if(animate) {
-			screen.selectedPawn.setPosition(pawn.spritePion.getX(),pawn.spritePion.getY());
-			screen.selectedPawn.setVisible(true);
-		}
-
 		boolean movePossible = false;
 		
 		ArrayList<Pawn> otherPawnList = new ArrayList<Pawn>(screen.pawnList);
@@ -176,16 +172,21 @@ public class JdpcSystem {
 				for(Pawn p : otherPawnList) {
 					if(found) {
 						break;
-					} else if( p.racePosition == futurePosition || (pawn.raceEndPosition == futurePosition && pawn.passed55)) {
+					} else if(p.racePosition == futurePosition || (pawn.raceEndPosition == futurePosition && pawn.passed55)) {
 						found = true;
 						direction *= -1;
 					}
 				}
 			}
-			movePossible = true;
+			if(pawn.racePosition != futurePosition) {
+				movePossible = true;
+			}
+			
 		}
 		
 		if(animate) {
+			screen.selectedPawn.setPosition(pawn.spritePion.getX(),pawn.spritePion.getY());
+			screen.selectedPawn.setVisible(true);
 			if(movePossible) {
 				if(moveInLadder) {
 					screen.possibleMove.setVisible(true);
