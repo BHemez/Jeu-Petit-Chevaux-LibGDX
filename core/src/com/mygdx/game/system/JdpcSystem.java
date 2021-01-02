@@ -24,38 +24,41 @@ public class JdpcSystem {
 	
 	public void changeTurn() {
 		if (checkForEndTurnCondition()){
-			if(this.playerTurn >= this.numberOfPlayer ) {
-				this.playerTurn = 1;
+			if(diceValue == 6) {
+				replay();
 			} else {
-				this.playerTurn += 1;
+				if(this.playerTurn >= this.numberOfPlayer ) {
+					this.playerTurn = 1;
+				} else {
+					this.playerTurn += 1;
+				}
+				this.diceThrown = false;
+				this.moveDone = false;
+				screen.diceLabel.setText("Throw");
+				
+		        switch(playerTurn) {
+	        	case 1:
+	        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("RedPlayer"));
+	        		break;
+	        	case 2:
+	        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("BluePlayer"));
+	        		break;
+	        	case 3:
+	        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("PurplePlayer"));
+	        		break;
+	        	case 4:
+	        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("GreenPlayer"));
+	        		break;
+		        }
+				System.out.println("TURN : Player " + this.playerTurn);
 			}
-			this.diceThrown = false;
-			this.moveDone = false;
-			screen.diceLabel.setText("Throw");
-			
-	        switch(playerTurn) {
-        	case 1:
-        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("RedPlayer"));
-        		break;
-        	case 2:
-        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("BluePlayer"));
-        		break;
-        	case 3:
-        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("PurplePlayer"));
-        		break;
-        	case 4:
-        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("GreenPlayer"));
-        		break;
-        }
-			
-			System.out.println("TURN : Player " + this.playerTurn);
 		}
 	}
 	
 	public void replay() {
 		this.diceThrown = false;
 		this.moveDone = false;
-		screen.diceLabel.setText("Jetez");
+		screen.diceLabel.setText("ReThrow");
 		System.out.println("Player " + this.playerTurn + " replay");
 	}
 	
@@ -234,10 +237,6 @@ public class JdpcSystem {
 
 	private boolean checkForEndTurnCondition() {
 		if(diceThrown && (moveDone || !checkForPossibleMove())) {
-			if(diceValue == 6) {
-				replay();
-				return false;
-			}
 			return true;
 		}
 		return false;
