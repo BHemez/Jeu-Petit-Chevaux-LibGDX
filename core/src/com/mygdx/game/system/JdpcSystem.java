@@ -10,7 +10,7 @@ public class JdpcSystem {
 	
 	public int diceValue;
 	
-	public int numberOfPlayer = 4;
+	public int numberOfPlayer;
 	public int playerTurn = 1;
 	public Boolean diceThrown = false;
 	public Boolean moveDone = false;
@@ -18,8 +18,9 @@ public class JdpcSystem {
 	private MainScreen screen;
 		
 	
-	public JdpcSystem(MainScreen scrn) {
+	public JdpcSystem(MainScreen scrn, int numberOfPlayer) {
 		this.screen = scrn;
+		this.numberOfPlayer = numberOfPlayer;
 	}
 	
 	public void changeTurn() {

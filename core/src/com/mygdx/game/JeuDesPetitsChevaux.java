@@ -24,35 +24,44 @@ public class JeuDesPetitsChevaux extends Game {
 
     public final static int MENU = 0;
     public final static int PREFERENCES = 1;
-    public final static int APPLICATION = 2;
-    public final static int ENDGAME = 3;
+    public final static int APPLICATION_2P = 2;
+    public final static int APPLICATION_3P = 3;
+    public final static int APPLICATION_4P = 4;
+    public final static int RESUME = 5;
+    public final static int ENDGAME = 6;
 
 public JeuDesPetitsChevaux(Dimension dimension) {
 		this.dimension = dimension;
 	}
 
 public void changeScreen(int screen){
-	System.out.print("CHANGEMENT D'ECRAN : ");
 	switch(screen){
 		case MENU:
 			if(menuScreen == null) menuScreen = new MenuScreen(this);
 			this.setScreen(menuScreen);
-	    	System.out.println("MENU-SCREEN");
 			break;
 		case PREFERENCES:
 			if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
 			this.setScreen(preferencesScreen);
-			System.out.println("PREFERENCE-SCREEN");
 			break;
-		case APPLICATION:
-			if(mainScreen == null) mainScreen = new MainScreen(this);
+		case APPLICATION_2P:
+			mainScreen = new MainScreen(this,2);
 			this.setScreen(mainScreen);
-			System.out.println("MAIN-SCREEN");
+			break;
+		case APPLICATION_3P:
+			mainScreen = new MainScreen(this,3);
+			this.setScreen(mainScreen);
+			break;
+		case APPLICATION_4P:
+			mainScreen = new MainScreen(this,4);
+			this.setScreen(mainScreen);
+			break;
+		case RESUME:
+			this.setScreen(mainScreen);
 			break;
 		case ENDGAME:
 			if(endScreen == null) endScreen = new EndScreen(this);
 			this.setScreen(endScreen);
-			System.out.println("END-SCREEN");
 			break;
 	}
 }

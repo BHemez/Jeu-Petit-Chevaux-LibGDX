@@ -58,12 +58,12 @@ public class MainScreen extends ScreenAdapter {
     private int draggedID = 0;
     private int downOnID = 0;
 	
-	public MainScreen(JeuDesPetitsChevaux jdpc) {
+	public MainScreen(JeuDesPetitsChevaux jdpc, int numberOfPlayer) {
 		this.parent = jdpc;
 		
 		this.skin = jdpc.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 		
-		this.system = new JdpcSystem(this);
+		this.system = new JdpcSystem(this, numberOfPlayer);
 
     	//float w = Gdx.graphics.getWidth();
         //float h = Gdx.graphics.getHeight();
