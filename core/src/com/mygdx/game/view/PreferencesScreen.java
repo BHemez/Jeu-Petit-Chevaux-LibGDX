@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
 
 public class PreferencesScreen extends ScreenAdapter{
@@ -36,7 +36,7 @@ public class PreferencesScreen extends ScreenAdapter{
 	
 	public PreferencesScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
-		stage = new Stage(new ScreenViewport());
+		stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 		
 		click = parent.assetManager.manager.get("sounds/click.mp3", Sound.class);
 		skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);

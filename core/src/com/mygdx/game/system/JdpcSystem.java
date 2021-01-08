@@ -55,7 +55,7 @@ public class JdpcSystem {
 		}
 	}
 	
-	public void replay() {
+	private void replay() {
 		this.diceThrown = false;
 		this.moveDone = false;
 		screen.diceLabel.setText("ReThrow");
@@ -75,7 +75,7 @@ public class JdpcSystem {
 		return diceValue;
 	}
 	
-	public void movePawn(Pawn pawn, int position, int ladPosition) {
+	private void movePawn(Pawn pawn, int position, int ladPosition) {
 		int oldPosition = pawn.racePosition;
 		pawn.racePosition = position;
 		int oldLadderPosition = pawn.ladderPosition;
@@ -92,7 +92,7 @@ public class JdpcSystem {
 		unShowPossibleMove();
 	}
 
-	public void movePawnToStart(Pawn pawn) {
+	private void movePawnToStart(Pawn pawn) {
 		pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceStartPosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.raceStartPosition]*GameMap.TILESIZE);
 		pawn.isInStable = false;
 		pawn.racePosition = pawn.raceStartPosition;
@@ -273,9 +273,4 @@ public class JdpcSystem {
 		return position;
 	}
 	
-	public void cheat(Pawn pawn) {
-		movePawnToStart(pawn);
-		movePawn(pawn, pawn.raceEndPosition, -2);
-		pawn.passed55 = true;
-	}
 }

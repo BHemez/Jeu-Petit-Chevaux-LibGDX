@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
 import com.mygdx.game.loader.LoadingBar;
 
@@ -33,14 +32,9 @@ public class LoadingScreen extends ScreenAdapter {
 
     private Actor loadingBar;
     
-    private Viewport viewport;
-    
-
     public LoadingScreen(JeuDesPetitsChevaux jdpc) {
         this.parent = jdpc;
-        
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        viewport.apply();
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 
     @Override
@@ -51,7 +45,7 @@ public class LoadingScreen extends ScreenAdapter {
         parent.assetManager.manager.finishLoading();
 
         // Initialize the stage where we will place everything
-        stage = new Stage();
+        //stage = new Stage();
 
         // Get our textureatlas from the manager
         TextureAtlas atlas = parent.assetManager.manager.get("loading/loading.pack", TextureAtlas.class);
@@ -94,16 +88,17 @@ public class LoadingScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         // Set our screen to always be XXX x 480 in size
-        width = 480 * width / height;
-        height = 480;
-        viewport.update(width,height);
+      //  width = 480 * width / height;
+       // height = 480;
+        //viewport.update(width,height);
+    	stage.getViewport().update(width, height, true);
 
         // Make the background fill the screen
         screenBg.setSize(width, height);
 
         // Place the logo in the middle of the screen and 100 px up
-        logo.setX((width - logo.getWidth()) / 2);
-        logo.setY((height - logo.getHeight()) / 2 + 100);
+        logo.setX((stage.getWidth() - logo.getWidth()) / 2);
+        logo.setY((stage.getHeight() - logo.getHeight()) / 2 + 100);
 
         // Place the loading frame in the middle of the screen
         loadingFrame.setX((stage.getWidth() - loadingFrame.getWidth()) / 2);

@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
 
 public class MenuScreen extends ScreenAdapter{
@@ -27,8 +27,7 @@ public class MenuScreen extends ScreenAdapter{
 	
 	public MenuScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
-		stage = new Stage(new ScreenViewport());
-		
+		stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 		click = parent.assetManager.manager.get("sounds/click.mp3", Sound.class);
 		jazz = parent.assetManager.manager.get("music/Jazz.mp3", Music.class);
 		skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
@@ -36,6 +35,8 @@ public class MenuScreen extends ScreenAdapter{
 	
 	@Override
 	public void show() {
+		
+		stage.clear();
 		
 		if(parent.getPreferences().isMusicEnabled()) {
 			jazz.play();
@@ -55,8 +56,9 @@ public class MenuScreen extends ScreenAdapter{
 		TextButton exit = new TextButton("Exit", skin);
 		
 		//AJOUT DES BOUTONS
+		table.row().pad(0, 0, 10, 0);
 		table.add(newGame).fillX().uniformX();
-		table.row().pad(10, 0, 10, 0);
+		table.row().pad(0, 0, 10, 0);
 		table.add(preferences).fillX().uniformX();
 		table.row();
 		table.add(exit).fillX().uniformX();
