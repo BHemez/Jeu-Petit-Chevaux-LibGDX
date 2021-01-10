@@ -130,8 +130,6 @@ public class LoadingScreen extends ScreenAdapter {
             if (Gdx.input.isTouched()) { // If the screen is touched after the game is done loading, go to the main menu screen
                 parent.changeScreen(JeuDesPetitsChevaux.MENU);
             }
-        } else {
-        	System.out.println("Loading : "+ parent.assetManager.manager.getProgress()*100+" %");
         }
 
         // Interpolate the percentage to make it more smooth

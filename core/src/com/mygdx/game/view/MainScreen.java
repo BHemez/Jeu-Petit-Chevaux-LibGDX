@@ -85,15 +85,20 @@ public class MainScreen extends ScreenAdapter {
 		buttonAtlas = parent.assetManager.manager.get("button/button.pack");
 		
         //=== CREATION DES SPRITES ===
-		pawnList.add(new Pawn(this.parent, 1,1,"Rouge1",0,55, new float[]{5,5}, GameMap.REDLADDERPOSITIONMATRIX));
-		pawnList.add(new Pawn(this.parent, 1,2,"Rouge2",0,55, new float[]{5,3}, GameMap.REDLADDERPOSITIONMATRIX));
-		pawnList.add(new Pawn(this.parent, 2,1,"Bleu1",14,13, new float[]{5,13}, GameMap.BLUELADDERPOSITIONMATRIX));
-		pawnList.add(new Pawn(this.parent, 2,2,"Bleu2",14,13, new float[]{5,15}, GameMap.BLUELADDERPOSITIONMATRIX));
-		pawnList.add(new Pawn(this.parent, 3,1,"Pourpre1",28,27, new float[]{13,13}, GameMap.PURPLELADDERPOSITIONMATRIX));
-		pawnList.add(new Pawn(this.parent, 3,2,"Pourpre2",28,27, new float[]{13,15}, GameMap.PURPLELADDERPOSITIONMATRIX));
-		pawnList.add(new Pawn(this.parent, 4,1,"Vert1",42,41, new float[]{13,5}, GameMap.GREENLADDERPOSITIONMATRIX));
-		pawnList.add(new Pawn(this.parent, 4,2,"Vert2",42,41, new float[]{13,3}, GameMap.GREENLADDERPOSITIONMATRIX));
-
+		switch(numberOfPlayer) {
+			case 4:
+				pawnList.add(new Pawn(this.parent, 4,1,"Vert1",42,41, new float[]{13,5}, GameMap.GREENLADDERPOSITIONMATRIX));
+				pawnList.add(new Pawn(this.parent, 4,2,"Vert2",42,41, new float[]{13,3}, GameMap.GREENLADDERPOSITIONMATRIX));
+			case 3:
+				pawnList.add(new Pawn(this.parent, 2,1,"Bleu1",14,13, new float[]{5,13}, GameMap.BLUELADDERPOSITIONMATRIX));
+				pawnList.add(new Pawn(this.parent, 2,2,"Bleu2",14,13, new float[]{5,15}, GameMap.BLUELADDERPOSITIONMATRIX));
+			case 2:
+				pawnList.add(new Pawn(this.parent, 1,1,"Rouge1",0,55, new float[]{5,5}, GameMap.REDLADDERPOSITIONMATRIX));
+				pawnList.add(new Pawn(this.parent, 1,2,"Rouge2",0,55, new float[]{5,3}, GameMap.REDLADDERPOSITIONMATRIX));
+				pawnList.add(new Pawn(this.parent, 3,1,"Pourpre1",28,27, new float[]{13,13}, GameMap.PURPLELADDERPOSITIONMATRIX));
+				pawnList.add(new Pawn(this.parent, 3,2,"Pourpre2",28,27, new float[]{13,15}, GameMap.PURPLELADDERPOSITIONMATRIX));
+				break;
+		}
         spriteDice = new Sprite(diceAtlas.findRegion("Dice6"));
         playerIcon = new Sprite(playerIconAtlas.findRegion("RedPlayer"));
         nextTurnButton = new Sprite(buttonAtlas.findRegion("NextTurnButton"));
@@ -191,7 +196,7 @@ public class MainScreen extends ScreenAdapter {
             	boolean pFound = false;
             	
             	for(Pawn p : pawnList) {
-            		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) && p.team == system.playerTurn && !pFound && (this.downOnID == p.id || this.downOnID == 0) ) {
+            		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) && p.team == system.playerList.get(system.playerTurn-1) && !pFound && (this.downOnID == p.id || this.downOnID == 0) ) {
             			system.findPossibleMove(p, true, false);
             			pFound = true;
             			downOnID = p.id;
@@ -214,7 +219,7 @@ public class MainScreen extends ScreenAdapter {
              Vector3 position = viewport.unproject(dragCoordinates);
              if(this.system.moveDone == false && this.system.diceThrown) {
              	for(Pawn p : pawnList) {
-             		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) && p.team == system.playerTurn && (this.draggedID == p.id || this.draggedID == 0)) {
+             		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) && p.team == system.playerList.get(system.playerTurn-1) && (this.draggedID == p.id || this.draggedID == 0)) {
              			p.setPosition(position.x-(GameMap.TILESIZE/2), position.y-(GameMap.TILESIZE/2));
              			this.draggedID = p.id;
              		}

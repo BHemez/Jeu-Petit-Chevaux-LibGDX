@@ -37,7 +37,7 @@ public class EndScreen extends ScreenAdapter {
 		congratulationLabel = new Label( "Congratulation !", skin );
 		congratulationLabel.setAlignment(Align.center);
 		String winner;
-		switch(this.parent.mainScreen.system.playerTurn) {
+		switch(this.parent.mainScreen.system.playerList.get(this.parent.mainScreen.system.playerTurn-1)) {
 			case 1:
 				winner = "RED won the race !";
 				break;

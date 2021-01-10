@@ -70,7 +70,6 @@ public void changeScreen(int screen){
     public void create() {
     	preferences = new AppPreferences();
     	loadingScreen = new LoadingScreen(this);
-    	System.out.println("LOADING-SCREEN");
     	this.setScreen(loadingScreen);
     }
 

@@ -1,6 +1,7 @@
 package com.mygdx.game.system;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.mygdx.game.JeuDesPetitsChevaux;
@@ -10,17 +11,33 @@ public class JdpcSystem {
 	
 	public int diceValue;
 	
-	public int numberOfPlayer;
+	public List<Integer> playerList;
 	public int playerTurn = 1;
 	public Boolean diceThrown = false;
 	public Boolean moveDone = false;
 
 	private MainScreen screen;
 		
-	
 	public JdpcSystem(MainScreen scrn, int numberOfPlayer) {
 		this.screen = scrn;
-		this.numberOfPlayer = numberOfPlayer;
+		this.playerList = new ArrayList<Integer>();
+		switch(numberOfPlayer) {
+			case 2:
+				this.playerList.add(1);
+				this.playerList.add(3);
+				break;
+			case 3:
+				this.playerList.add(1);
+				this.playerList.add(2);
+				this.playerList.add(3);
+				break;
+			case 4:
+				this.playerList.add(1);
+				this.playerList.add(2);
+				this.playerList.add(3);
+				this.playerList.add(4);
+				break;
+		}
 	}
 	
 	public void changeTurn() {
@@ -28,7 +45,7 @@ public class JdpcSystem {
 			if(diceValue == 6) {
 				replay();
 			} else {
-				if(this.playerTurn >= this.numberOfPlayer ) {
+				if(this.playerTurn >= this.playerList.size()) {
 					this.playerTurn = 1;
 				} else {
 					this.playerTurn += 1;
@@ -37,7 +54,7 @@ public class JdpcSystem {
 				this.moveDone = false;
 				screen.diceLabel.setText("Throw");
 				
-		        switch(playerTurn) {
+		        switch(playerList.get(playerTurn-1)) {
 	        	case 1:
 	        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("RedPlayer"));
 	        		break;
@@ -51,7 +68,6 @@ public class JdpcSystem {
 	        		this.screen.playerIcon.setRegion(this.screen.playerIconAtlas.findRegion("GreenPlayer"));
 	        		break;
 		        }
-				System.out.println("TURN : Player " + this.playerTurn);
 			}
 		}
 	}
@@ -60,7 +76,6 @@ public class JdpcSystem {
 		this.diceThrown = false;
 		this.moveDone = false;
 		screen.diceLabel.setText("ReThrow");
-		System.out.println("Player " + this.playerTurn + " replay");
 	}
 	
 	public int throwDice() {
@@ -71,23 +86,18 @@ public class JdpcSystem {
 			this.diceThrown = true;
 			this.moveDone = false;
 			screen.diceLabel.setText(""+diceValue);
-			System.out.println("VALEUR DU DE : " + this.diceValue);
 		}
 		return diceValue;
 	}
 	
 	private void movePawn(Pawn pawn, int position, int ladPosition) {
-		int oldPosition = pawn.racePosition;
 		pawn.racePosition = position;
-		int oldLadderPosition = pawn.ladderPosition;
 		pawn.ladderPosition = ladPosition;
 		if(position != -2) {
 			pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
 			checkUnder(pawn);
-			System.out.println("Moved "+pawn.team+"-"+pawn.id+" from "+oldPosition +" to "+position);
 		} else {
 			pawn.setPosition(pawn.ladderMatrix[0][ladPosition]*GameMap.TILESIZE, pawn.ladderMatrix[1][ladPosition]*GameMap.TILESIZE);
-			System.out.println("Moved "+pawn.team+"-"+pawn.id+" from "+oldLadderPosition +" to "+ladPosition);
 		}
 		this.moveDone = true;
 		unShowPossibleMove();
@@ -242,7 +252,7 @@ public class JdpcSystem {
 	
 	private boolean checkForPossibleMove() {
 		for(Pawn p : screen.pawnList) {
-			if(p.team == this.playerTurn && findPossibleMove(p,false, false)) {
+			if(p.team == playerList.get(playerTurn-1) && findPossibleMove(p,false, false)) {
 				return true;
 			}
 		}
@@ -250,7 +260,6 @@ public class JdpcSystem {
 	}
 
 	private void triggerVictory() {
-		System.out.println("VICTORY : Player "+ this.playerTurn);
 		this.screen.parent.changeScreen(JeuDesPetitsChevaux.ENDGAME);
 	}
 
