@@ -1,4 +1,4 @@
-package com.mygdx.game.loader;
+package com.mygdx.game.view;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class LoadingBar extends Actor {
+public class Animated extends Actor {
 
 	private Animation<AtlasRegion> animation;
 	private TextureRegion reg;
 	private float stateTime;
 
-    public LoadingBar(Animation<AtlasRegion> animation) {
+    public Animated(Animation<AtlasRegion> animation) {
         this.animation = animation;
         reg = animation.getKeyFrame(0);
     }

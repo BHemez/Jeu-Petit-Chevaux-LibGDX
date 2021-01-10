@@ -12,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
-import com.mygdx.game.loader.LoadingBar;
-
 
 public class LoadingScreen extends ScreenAdapter {
 
@@ -56,7 +54,7 @@ public class LoadingScreen extends ScreenAdapter {
         // Add the loading bar animation
         Animation<AtlasRegion> anim = new Animation<AtlasRegion>(0.05f, atlas.findRegions("loading-bar-anim") );
         anim.setPlayMode(Animation.PlayMode.LOOP_REVERSED);
-        loadingBar = new LoadingBar(anim);
+        loadingBar = new Animated(anim);
 
         // Or if you only need a static bar, you can do
         // loadingBar = new Image(atlas.findRegion("loading-bar1"));
