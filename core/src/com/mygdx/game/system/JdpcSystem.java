@@ -9,14 +9,12 @@ import com.mygdx.game.view.MainScreen;
 
 public class JdpcSystem {
 	
-	public int diceValue;
-	
+	private MainScreen screen;
+	private int diceValue;
 	public List<Integer> playerList;
 	public int playerTurn = 1;
 	public Boolean diceThrown = false;
 	public Boolean moveDone = false;
-
-	private MainScreen screen;
 		
 	public JdpcSystem(MainScreen scrn, int numberOfPlayer) {
 		this.screen = scrn;

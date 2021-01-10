@@ -1,14 +1,14 @@
 package com.mygdx.game.system;
 
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.mygdx.game.OrthogonalTiledMapRendererWithSprites;
 
 public class GameMap {
-	
-    public TiledMap tiledMap;
     public OrthogonalTiledMapRendererWithSprites tiledMapRenderer;
-    
     public static float TILESIZE;
+    public static float MAP_WIDTH;
+    public static float MAP_HEIGHT;
     
     public static final float[][] POSITIONMATRIX = new float[][]
 		{
@@ -41,9 +41,11 @@ public class GameMap {
 		};
 
 	public GameMap(TiledMap tiledMap, float tileSize) {
-		this.tiledMap = tiledMap;
 		this.tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap);
-		GameMap.TILESIZE = tileSize;
+		MapProperties prop = tiledMap.getProperties();
+		GameMap.TILESIZE = prop.get("tilewidth", Integer.class);
+		GameMap.MAP_WIDTH = prop.get("width", Integer.class);
+		GameMap.MAP_HEIGHT = prop.get("height", Integer.class);
 	}
     	
 }

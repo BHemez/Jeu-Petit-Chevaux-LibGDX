@@ -18,18 +18,14 @@ import com.mygdx.game.loader.LoadingBar;
 public class LoadingScreen extends ScreenAdapter {
 
 	private JeuDesPetitsChevaux parent;
-	
     private Stage stage;
-
     private Image logo;
     private Image loadingFrame;
     private Image loadingBarHidden;
     private Image screenBg;
     private Image loadingBg;
-
     private float startX, endX;
     private float percent;
-
     private Actor loadingBar;
     
     public LoadingScreen(JeuDesPetitsChevaux jdpc) {
@@ -149,6 +145,6 @@ public class LoadingScreen extends ScreenAdapter {
     @Override
     public void hide() {
         // Dispose the loading assets as we no longer need them
-        parent.assetManager.manager.unload("loading/loading.pack");
+    	parent.assetManager.manager.unload("loading/loading.pack");
     }
 }

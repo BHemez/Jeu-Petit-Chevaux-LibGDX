@@ -12,21 +12,21 @@ public class JdpcAssetManager {
 	public final AssetManager manager = new AssetManager();
 	
 	//Textures
-	public final String loadingAtlas = "loading/loading.pack";
-	public final String pionsAtlas = "pions/pions.pack";
-	public final String playerIconAtlas = "playerIcon/playerIcon.pack";
-	public final String diceAtlas = "dice/dice.pack";
-	public final String possibleMoveAtlas = "possibleMove/possibleMove.pack";
-	public final String button = "button/button.pack";
+	private final String loadingAtlas = "loading/loading.pack";
+	private final String pionsAtlas = "pions/pions.pack";
+	private final String playerIconAtlas = "playerIcon/playerIcon.pack";
+	private final String diceAtlas = "dice/dice.pack";
+	private final String possibleMoveAtlas = "possibleMove/possibleMove.pack";
+	private final String button = "button/button.pack";
 	
 	//Sounds
-	public final String clickSound = "sounds/click.mp3";
+	private final String clickSound = "sounds/click.mp3";
 	
 	//Music
-	public final String jazzMusic = "music/Jazz.mp3";
+	private final String jazzMusic = "music/Jazz.mp3";
 	
 	//Skin
-	public final String skin = "skin/glassy-ui.json";
+	private final String skin = "skin/glassy-ui.json";
 	
 	
 	public void queueAddPions(){

@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class MouseKeyboardController implements InputProcessor{
 
-	public boolean left,right,up,down,spacebar,escape;
+	public boolean spacebar,escape;
 	public boolean isMouse1Down, isMouse2Down,isMouse3Down;
 	public boolean isDragged;
 	public Vector2 mouseLocation = new Vector2(0,0);
@@ -17,22 +17,6 @@ public class MouseKeyboardController implements InputProcessor{
 		switch (keycode) 
 		{
 
-		        case Keys.LEFT:
-		            left = true;
-		            keyProcessed = true;
-		            break;
-		        case Keys.RIGHT:
-		            right = true;
-		            keyProcessed = true;
-		            break;
-		        case Keys.UP:
-		            up = true;
-		            keyProcessed = true;
-		            break;
-		        case Keys.DOWN:
-		            down = true;
-		            keyProcessed = true;
-		            break;
 		        case Keys.SPACE:
 		        	spacebar = true;
 		            keyProcessed = true;
@@ -49,21 +33,6 @@ public class MouseKeyboardController implements InputProcessor{
 	boolean keyProcessed = false;
 	switch (keycode)
         {
-	        case Keys.LEFT:
-	            left = false;
-	            keyProcessed = true;
-	            break;
-	        case Keys.RIGHT:
-	            right = false;
-	            keyProcessed = true;
-	            break;
-	        case Keys.UP:
-	            up = false;
-	            keyProcessed = true;
-	            break;
-	        case Keys.DOWN:
-	            down = false;
-	            keyProcessed = true;
 	        case Keys.SPACE:
 	        	spacebar = false;
 	            keyProcessed = true;

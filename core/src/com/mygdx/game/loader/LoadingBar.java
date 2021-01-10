@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class LoadingBar extends Actor {
 
-    Animation<AtlasRegion> animation;
-    TextureRegion reg;
-    float stateTime;
+	private Animation<AtlasRegion> animation;
+	private TextureRegion reg;
+	private float stateTime;
 
     public LoadingBar(Animation<AtlasRegion> animation) {
         this.animation = animation;

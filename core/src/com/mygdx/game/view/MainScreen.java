@@ -29,13 +29,11 @@ import com.mygdx.game.system.PossibleMove;
 public class MainScreen extends ScreenAdapter {
 	
 	public JeuDesPetitsChevaux parent;
-	private MouseKeyboardController controller;
 	
-    public OrthographicCamera camera;
-    public GameMap gameMap;
+	private MouseKeyboardController controller;
+	private OrthographicCamera camera;
+	private GameMap gameMap;
     public ArrayList<Pawn> pawnList = new ArrayList<Pawn>();
-    
-    public Sprite spriteDice;
     
     public Viewport viewport;
     
@@ -46,14 +44,16 @@ public class MainScreen extends ScreenAdapter {
     public Label playerLabel;
     public Sprite playerIcon;
     public Label diceLabel;
+    public Sprite spriteDice;
     public Sprite nextTurnButton;
+    public Sprite menuButton;
    
     public TextureAtlas diceAtlas;
     public TextureAtlas playerIconAtlas;
-    public TextureAtlas buttonAtlas;
+    private TextureAtlas buttonAtlas;
     
-    public Stage stage;
-    public Skin skin;
+    private Stage stage;
+    private Skin skin;
     
     private int draggedID = 0;
     private int downOnID = 0;
@@ -64,20 +64,18 @@ public class MainScreen extends ScreenAdapter {
 		this.skin = jdpc.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 		
 		this.system = new JdpcSystem(this, numberOfPlayer);
+		
+        //=== CHARGEMENT DE LA CARTE ===
+        gameMap = new GameMap(new TmxMapLoader().load("carte.tmx"), 16);
 
-    	//float w = Gdx.graphics.getWidth();
-        //float h = Gdx.graphics.getHeight();
+        //=== AJOUT CAMERA ===
         camera = new OrthographicCamera();
-        
-        viewport = new FitViewport(368,304,camera);
+        viewport = new FitViewport(GameMap.MAP_WIDTH*GameMap.TILESIZE,GameMap.MAP_HEIGHT*GameMap.TILESIZE,camera);
         viewport.apply();
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
         
-        //AJOUT DU CONTROLLEUR
+        //=== AJOUT DU CONTROLLEUR ===
         controller = new MouseKeyboardController();
-        
-        //=== CHARGEMENT DE LA CARTE ===
-        gameMap = new GameMap(new TmxMapLoader().load("carte.tmx"), 16);
         
         //=== CHARGEMENT DES TEXTURES ===
         diceAtlas = parent.assetManager.manager.get("dice/dice.pack", TextureAtlas.class);
@@ -102,6 +100,7 @@ public class MainScreen extends ScreenAdapter {
         spriteDice = new Sprite(diceAtlas.findRegion("Dice6"));
         playerIcon = new Sprite(playerIconAtlas.findRegion("RedPlayer"));
         nextTurnButton = new Sprite(buttonAtlas.findRegion("NextTurnButton"));
+        menuButton = new Sprite(buttonAtlas.findRegion("MenuButton"));
         
         //=== AJOUT DES SPRITES SUR LA CARTE ===
         for(Pawn p : pawnList) {
@@ -110,6 +109,7 @@ public class MainScreen extends ScreenAdapter {
         gameMap.tiledMapRenderer.addSprite(spriteDice);
         gameMap.tiledMapRenderer.addSprite(playerIcon);
         gameMap.tiledMapRenderer.addSprite(nextTurnButton);
+        gameMap.tiledMapRenderer.addSprite(menuButton);
         
         //=== POSITIONNEMENT DES SPRITES SUR LA CARTE ===
         for(Pawn p : pawnList) {
@@ -118,6 +118,7 @@ public class MainScreen extends ScreenAdapter {
         spriteDice.setPosition(320,176);
         playerIcon.setPosition(304, 240);
         nextTurnButton.setPosition(304, 112);
+        menuButton.setPosition(304, 48);
 	}
 	
 	@Override
@@ -164,15 +165,7 @@ public class MainScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         //KEYBOARD
-    	if(controller.left){
-    		camera.translate(-3,0);
-    	}else if(controller.right) {
-    		camera.translate(3,0);
-    	}else if(controller.up) {
-    		camera.translate(0,3);
-    	}else if(controller.down) {
-    		camera.translate(0,-3);
-    	}else if(controller.escape) {
+        if(controller.escape) {
     		controller.escape = false;
             parent.changeScreen(JeuDesPetitsChevaux.MENU);
     	}else if(controller.spacebar) {
@@ -190,6 +183,11 @@ public class MainScreen extends ScreenAdapter {
             
             if(nextTurnButton.getBoundingRectangle().contains(position.x, position.y)) {
             	this.system.changeTurn();
+            }
+            
+            if(menuButton.getBoundingRectangle().contains(position.x, position.y)) {
+            	controller.isMouse1Down = false;
+            	parent.changeScreen(JeuDesPetitsChevaux.MENU);
             }
 
             if(this.system.moveDone == false && this.system.diceThrown) {
@@ -246,6 +244,7 @@ public class MainScreen extends ScreenAdapter {
     public void dispose(){
     	for(Pawn p : pawnList) { p.dispose(); }
     	nextTurnButton.getTexture().dispose();
+    	menuButton.getTexture().dispose();
     	spriteDice.getTexture().dispose();
     	playerIcon.getTexture().dispose();
     	parent.assetManager.manager.dispose();

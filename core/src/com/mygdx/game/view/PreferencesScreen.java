@@ -32,7 +32,7 @@ public class PreferencesScreen extends ScreenAdapter{
 	private Label musicOnOffLabel;
 	private Label soundOnOffLabel;
 	
-	public static final int CLICK_SOUND = 0;
+	private static final int CLICK_SOUND = 0;
 	
 	public PreferencesScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;

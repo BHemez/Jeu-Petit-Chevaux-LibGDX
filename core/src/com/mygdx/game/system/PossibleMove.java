@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class PossibleMove extends Actor {
 
-    Animation<AtlasRegion> animation;
-    TextureRegion reg;
-    float stateTime;
+    private Animation<AtlasRegion> animation;
+    private TextureRegion reg;
+    private float stateTime;
 
     public PossibleMove(Animation<AtlasRegion> animation) {
         this.animation = animation;

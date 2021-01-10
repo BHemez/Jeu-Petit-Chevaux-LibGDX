@@ -1,7 +1,5 @@
 package com.mygdx.game;
 
-import java.awt.Dimension;
-
 import com.badlogic.gdx.Game;
 import com.mygdx.game.loader.JdpcAssetManager;
 import com.mygdx.game.view.EndScreen;
@@ -20,7 +18,6 @@ public class JeuDesPetitsChevaux extends Game {
     private MenuScreen menuScreen;
     public MainScreen mainScreen;
     private EndScreen endScreen;
-    public Dimension dimension;
 
     public final static int MENU = 0;
     public final static int PREFERENCES = 1;
@@ -29,10 +26,6 @@ public class JeuDesPetitsChevaux extends Game {
     public final static int APPLICATION_4P = 4;
     public final static int RESUME = 5;
     public final static int ENDGAME = 6;
-
-public JeuDesPetitsChevaux(Dimension dimension) {
-		this.dimension = dimension;
-	}
 
 public void changeScreen(int screen){
 	switch(screen){

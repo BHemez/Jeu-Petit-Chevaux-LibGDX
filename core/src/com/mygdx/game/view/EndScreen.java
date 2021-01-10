@@ -16,7 +16,6 @@ public class EndScreen extends ScreenAdapter {
 	private JeuDesPetitsChevaux parent;
 	private Stage stage;
 	private Skin skin;
-	
 	private Label winnerLabel;
 	private Label congratulationLabel;
 	

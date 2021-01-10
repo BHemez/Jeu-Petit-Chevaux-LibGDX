@@ -11,15 +11,14 @@ public class Pawn {
     public int team;
     public int id;
     
-    public int raceStartPosition;
-    public int raceEndPosition;
-    public int racePosition = -2;
-    public int ladderPosition = -2;
-    public float[] stablePosition;
-    public float[][] ladderMatrix;
-    public Boolean passed55;
-    public Boolean isInStable;
-
+    protected int raceStartPosition;
+    protected int raceEndPosition;
+    protected int racePosition = -2;
+    protected int ladderPosition = -2;
+    protected float[] stablePosition;
+    protected float[][] ladderMatrix;
+    protected Boolean passed55;
+    protected Boolean isInStable;
 
     public Pawn(JeuDesPetitsChevaux parent, int team, int id, String pion, int start, int end, float[] stable, float[][] ladder) {
     	this.team = team;
