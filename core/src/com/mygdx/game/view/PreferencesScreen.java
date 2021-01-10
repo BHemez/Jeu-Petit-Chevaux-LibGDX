@@ -50,7 +50,7 @@ public class PreferencesScreen extends ScreenAdapter{
 		
 		Table table = new Table();
 		table.setFillParent(true);
-		table.setDebug(false);		//Ajoute des boites oour visualiser l'emplacement des elements si true.
+		table.setDebug(false);		//Ajoute des boites pour visualiser l'emplacement des elements si true.
 		stage.addActor(table);
 		 
 		//volume music
@@ -140,35 +140,21 @@ public class PreferencesScreen extends ScreenAdapter{
 		
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
+		
+		if(parent.getPreferences().isMusicEnabled()) {
+			parent.menuScreen.jazz.play();
+			parent.menuScreen.jazz.setVolume(parent.getPreferences().getMusicVolume());
+		} else {
+			parent.menuScreen.jazz.pause();
+		}
 	}
  
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
 	}
- 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-	}
- 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-	}
- 
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-	}
- 
-	@Override
-	public void dispose() {
-		stage.dispose();
-		parent.assetManager.manager.dispose();
-	}
 	
-	public void playSound(int sound){
+	public void playSound(int sound) {
 		if(parent.getPreferences().isSoundEffectsEnabled()) {
 			switch(sound){
 			case CLICK_SOUND:

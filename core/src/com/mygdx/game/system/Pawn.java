@@ -47,10 +47,5 @@ public class Pawn {
     	this.passed55 = false;
     	this.setPosition(this.stablePosition[0]*16, this.stablePosition[1]*16);
     }
-    
-    public void dispose() {
-    	this.spritePion.getTexture().dispose();
-    }
-
 	
 }

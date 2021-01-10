@@ -21,6 +21,8 @@ public class JdpcAssetManager {
 	
 	//Sounds
 	private final String clickSound = "sounds/click.mp3";
+	private final String diceSound = "sounds/diceRoll.mp3";
+	private final String fanfare = "sounds/triumphalFanfare.mp3";
 	
 	//Music
 	private final String jazzMusic = "music/Jazz.mp3";
@@ -47,6 +49,8 @@ public class JdpcAssetManager {
 	
 	public void queueAddSounds(){
 		manager.load(clickSound, Sound.class);
+		manager.load(diceSound, Sound.class);
+		manager.load(fanfare, Sound.class);
 	}
 
 	public void queueAddMusic(){

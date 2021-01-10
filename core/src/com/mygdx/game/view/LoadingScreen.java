@@ -38,9 +38,6 @@ public class LoadingScreen extends ScreenAdapter {
         // Wait until they are finished loading
         parent.assetManager.manager.finishLoading();
 
-        // Initialize the stage where we will place everything
-        //stage = new Stage();
-
         // Get our textureatlas from the manager
         TextureAtlas atlas = parent.assetManager.manager.get("loading/loading.pack", TextureAtlas.class);
 
@@ -76,15 +73,10 @@ public class LoadingScreen extends ScreenAdapter {
 		parent.assetManager.queueAddButtons();
 		parent.assetManager.queueAddDice();
 		parent.assetManager.queueAddPossibleMove();
-		
     }
 
     @Override
     public void resize(int width, int height) {
-        // Set our screen to always be XXX x 480 in size
-      //  width = 480 * width / height;
-       // height = 480;
-        //viewport.update(width,height);
     	stage.getViewport().update(width, height, true);
 
         // Make the background fill the screen

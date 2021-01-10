@@ -27,10 +27,10 @@ public class MenuScreen extends ScreenAdapter{
 	private static final int MENU_CHOICE = 2;
 	
 	private Sound click;
-	private Music jazz;
+	public Music jazz;
 	private Skin skin;
 	
-	public static final int CLICK_SOUND = 0;
+	private static final int CLICK_SOUND = 0;
 	
 	public MenuScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
@@ -45,13 +45,6 @@ public class MenuScreen extends ScreenAdapter{
 	
 	@Override
 	public void show() {
-		
-		if(parent.getPreferences().isMusicEnabled()) {
-			jazz.play();
-		}
-
-		jazz.setVolume(parent.getPreferences().getMusicVolume());
-		
 		Gdx.input.setInputProcessor(stageMenu);
 		
 		//CREATION DES BOUTONS & TABLES
@@ -223,7 +216,13 @@ public class MenuScreen extends ScreenAdapter{
 			break;
 		}
 		
-
+		if(parent.getPreferences().isMusicEnabled()) {
+			jazz.play();
+			jazz.setVolume(parent.getPreferences().getMusicVolume());
+		} else {
+			jazz.pause();
+		}
+		
 	}
  
 	@Override
@@ -232,33 +231,8 @@ public class MenuScreen extends ScreenAdapter{
 		stageMenuResume.getViewport().update(width, height, true);
 		stageChoice.getViewport().update(width, height, true);
 	}
- 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-	}
- 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-	}
- 
-	@Override
-	public void hide() {
-		//jazz.pause();
-		jazz.stop();
-	}
- 
-	@Override
-	public void dispose() {
-		stageMenu.dispose();
-		stageMenuResume.dispose();
-		stageChoice.dispose();
-		jazz.dispose();
-		parent.assetManager.manager.dispose();
-	}
 	
-	public void playSound(int sound){
+	public void playSound(int sound) {
 		if(parent.getPreferences().isSoundEffectsEnabled()) {
 			switch(sound){
 			case CLICK_SOUND:

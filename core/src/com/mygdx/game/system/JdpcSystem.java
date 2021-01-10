@@ -38,7 +38,7 @@ public class JdpcSystem {
 		}
 	}
 	
-	public void changeTurn() {
+	public boolean changeTurn() {
 		if (checkForEndTurnCondition()){
 			if(diceValue == 6) {
 				replay();
@@ -67,7 +67,9 @@ public class JdpcSystem {
 	        		break;
 		        }
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	private void replay() {
@@ -76,7 +78,7 @@ public class JdpcSystem {
 		screen.diceLabel.setText("ReThrow");
 	}
 	
-	public int throwDice() {
+	public boolean throwDice() {
 		if(!diceThrown || (diceThrown && diceValue == 6 && moveDone)) {
 			this.diceValue = new Random().nextInt(6)+1;
 			//AJOUTER ANIMATION / FEEDBACK SONORE
@@ -84,8 +86,9 @@ public class JdpcSystem {
 			this.diceThrown = true;
 			this.moveDone = false;
 			screen.diceLabel.setText(""+diceValue);
+			return true;
 		}
-		return diceValue;
+		return false;
 	}
 	
 	private void movePawn(Pawn pawn, int position, int ladPosition) {

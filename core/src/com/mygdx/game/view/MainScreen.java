@@ -3,6 +3,7 @@ package com.mygdx.game.view;
 import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -55,6 +56,11 @@ public class MainScreen extends ScreenAdapter {
     
     private int draggedID = 0;
     private int downOnID = 0;
+    
+	private Sound click;
+	private Sound diceRoll;
+	private static final int CLICK_SOUND = 0;
+	private static final int DICE_SOUND = 1;
 	
 	public MainScreen(JeuDesPetitsChevaux jdpc, int numberOfPlayer) {
 		this.parent = jdpc;
@@ -63,24 +69,24 @@ public class MainScreen extends ScreenAdapter {
 		
 		this.system = new JdpcSystem(this, numberOfPlayer);
 		
-        //=== CHARGEMENT DE LA CARTE ===
+        //=== LOADING MAP ===
         gameMap = new GameMap(new TmxMapLoader().load("carte.tmx"), 16);
 
-        //=== AJOUT CAMERA ===
+        //=== ADDING CAMERA ===
         camera = new OrthographicCamera();
         viewport = new FitViewport(GameMap.MAP_WIDTH*GameMap.TILESIZE,GameMap.MAP_HEIGHT*GameMap.TILESIZE,camera);
         viewport.apply();
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
         
-        //=== AJOUT DU CONTROLLEUR ===
+        //=== ADDING CONTROLLER ===
         controller = new MouseKeyboardController();
         
-        //=== CHARGEMENT DES TEXTURES ===
+        //=== ADDING TEXTURES ===
         diceAtlas = parent.assetManager.manager.get("dice/dice.pack", TextureAtlas.class);
 		playerIconAtlas = parent.assetManager.manager.get("playerIcon/playerIcon.pack");
 		buttonAtlas = parent.assetManager.manager.get("button/button.pack");
 		
-        //=== CREATION DES SPRITES ===
+        //=== SPRITES CREATION ===
 		switch(numberOfPlayer) {
 			case 4:
 				pawnList.add(new Pawn(this.parent, 4,1,"Vert1",42,41, new float[]{13,5}, GameMap.GREENLADDERPOSITIONMATRIX));
@@ -100,7 +106,7 @@ public class MainScreen extends ScreenAdapter {
         nextTurnButton = new Sprite(buttonAtlas.findRegion("NextTurnButton"));
         menuButton = new Sprite(buttonAtlas.findRegion("MenuButton"));
         
-        //=== AJOUT DES SPRITES SUR LA CARTE ===
+        //=== ADDING SPRITES ON MAP ===
         for(Pawn p : pawnList) {
         	gameMap.tiledMapRenderer.addSprite(p.spritePion);
         }
@@ -109,7 +115,7 @@ public class MainScreen extends ScreenAdapter {
         gameMap.tiledMapRenderer.addSprite(nextTurnButton);
         gameMap.tiledMapRenderer.addSprite(menuButton);
         
-        //=== POSITIONNEMENT DES SPRITES SUR LA CARTE ===
+        //=== PLACING SPRITES ON MAP ===
         for(Pawn p : pawnList) {
         	p.setToStablePosition();
         }
@@ -117,6 +123,10 @@ public class MainScreen extends ScreenAdapter {
         playerIcon.setPosition(304, 240);
         nextTurnButton.setPosition(304, 112);
         menuButton.setPosition(304, 48);
+        
+		//=== ADDING SOUNDS ===
+		click = parent.assetManager.manager.get("sounds/click.mp3", Sound.class);
+		diceRoll = parent.assetManager.manager.get("sounds/diceRoll.mp3", Sound.class);
 	}
 	
 	@Override
@@ -176,15 +186,16 @@ public class MainScreen extends ScreenAdapter {
             Vector3 position = viewport.unproject(clickCoordinates);
 
             if(spriteDice.getBoundingRectangle().contains(position.x, position.y)) {
-                this.system.throwDice();
+                if(this.system.throwDice()) playSound(DICE_SOUND);
             }
             
             if(nextTurnButton.getBoundingRectangle().contains(position.x, position.y)) {
-            	this.system.changeTurn();
+            	if(this.system.changeTurn()) playSound(CLICK_SOUND);
             }
             
             if(menuButton.getBoundingRectangle().contains(position.x, position.y)) {
             	controller.isMouse1Down = false;
+            	playSound(CLICK_SOUND);
             	parent.changeScreen(JeuDesPetitsChevaux.MENU);
             }
 
@@ -237,21 +248,24 @@ public class MainScreen extends ScreenAdapter {
         stage.act();
         stage.draw();
     }
-	
-    @Override
-    public void dispose(){
-    	for(Pawn p : pawnList) { p.dispose(); }
-    	nextTurnButton.getTexture().dispose();
-    	menuButton.getTexture().dispose();
-    	spriteDice.getTexture().dispose();
-    	playerIcon.getTexture().dispose();
-    	parent.assetManager.manager.dispose();
-    }
     
     @Override
     public void resize(int width, int height){
        viewport.update(width,height);
        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
     }
+    
+	public void playSound(int sound) {
+		if(parent.getPreferences().isSoundEffectsEnabled()) {
+			switch(sound){
+			case CLICK_SOUND:
+				click.play(parent.getPreferences().getSoundVolume());
+				break;
+			case DICE_SOUND:
+				diceRoll.play(parent.getPreferences().getSoundVolume());
+				break;
+			}
+		}
+	}
     
 }

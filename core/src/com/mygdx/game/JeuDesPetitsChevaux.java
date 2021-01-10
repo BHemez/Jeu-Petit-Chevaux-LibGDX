@@ -15,7 +15,7 @@ public class JeuDesPetitsChevaux extends Game {
     
     private LoadingScreen loadingScreen;
     private PreferencesScreen preferencesScreen;
-    private MenuScreen menuScreen;
+    public MenuScreen menuScreen;
     public MainScreen mainScreen;
     private EndScreen endScreen;
 
@@ -65,9 +65,9 @@ public void changeScreen(int screen){
     	loadingScreen = new LoadingScreen(this);
     	this.setScreen(loadingScreen);
     }
-
+    
     public AppPreferences getPreferences() {
     	return this.preferences;
     	}
-    
+	
 }

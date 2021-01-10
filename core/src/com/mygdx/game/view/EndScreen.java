@@ -2,6 +2,7 @@ package com.mygdx.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,11 +19,13 @@ public class EndScreen extends ScreenAdapter {
 	private Skin skin;
 	private Label winnerLabel;
 	private Label congratulationLabel;
+	private Sound fanfare;
 	
 	public EndScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
 		stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 		skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
+		fanfare = jdpc.assetManager.manager.get("triumphalFanfare/click.mp3", Sound.class);
 	}
 	
 	@Override
@@ -60,6 +63,8 @@ public class EndScreen extends ScreenAdapter {
 		table.add(congratulationLabel);
 		table.row().pad(10,0,0,10);
 		table.add(winnerLabel);
+		
+		fanfare.play(parent.getPreferences().getSoundVolume());
 	}
  
 	@Override
@@ -69,31 +74,6 @@ public class EndScreen extends ScreenAdapter {
 		
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
-	}
- 
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-	}
- 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-	}
- 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-	}
- 
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-	}
- 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
 	}
 	
 }
