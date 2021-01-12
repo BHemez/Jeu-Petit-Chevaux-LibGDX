@@ -13,24 +13,37 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
 
+/**
+ * LoadingScreen is the screen displayed when the app launch.
+ * It allow the app to load every assets before giving
+ * the users control. Prevent the game from freezing.
+ */
 public class LoadingScreen extends ScreenAdapter {
-
-	private JeuDesPetitsChevaux parent;
-    private Stage stage;
+	private JeuDesPetitsChevaux parent; //Parent class of the screen
+    private Stage stage; //A 2D scene graph containing hierarchies of actors. Stage handles the viewport and distributes input events.
+    
+    //Set of images used in the screen.
     private Image logo;
     private Image loadingFrame;
     private Image loadingBarHidden;
     private Image screenBg;
     private Image loadingBg;
-    private float startX, endX;
-    private float percent;
-    private Actor loadingBar;
+    private Actor loadingBar; //Animated image for the loading bar
     
+    private float startX, endX; //Start and End position of the loading bar
+    private float percent; //Loading progress in %
+
+    /**
+     * LoadingScreen's constructor
+     */
     public LoadingScreen(JeuDesPetitsChevaux jdpc) {
         this.parent = jdpc;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 
+	/**
+	 * show is called when this screen becomes the current screen
+	 */
     @Override
     public void show() {
         // Tell the manager to load assets for the loading screen
@@ -53,9 +66,6 @@ public class LoadingScreen extends ScreenAdapter {
         anim.setPlayMode(Animation.PlayMode.LOOP_REVERSED);
         loadingBar = new Animated(anim);
 
-        // Or if you only need a static bar, you can do
-        // loadingBar = new Image(atlas.findRegion("loading-bar1"));
-
         // Add all the actors to the stage
         stage.addActor(screenBg);
         stage.addActor(loadingBar);
@@ -64,7 +74,7 @@ public class LoadingScreen extends ScreenAdapter {
         stage.addActor(loadingFrame);
         stage.addActor(logo);
 
-        // Add everything to be loaded, for instance:
+        // Add everything to be loaded
 		parent.assetManager.queueAddSounds();
 		parent.assetManager.queueAddMusic();
 		parent.assetManager.queueAddSkin();
@@ -75,6 +85,9 @@ public class LoadingScreen extends ScreenAdapter {
 		parent.assetManager.queueAddPossibleMove();
     }
 
+	/**
+	 * resize is called when the Application is resized.
+	 */
     @Override
     public void resize(int width, int height) {
     	stage.getViewport().update(width, height, true);
@@ -107,13 +120,17 @@ public class LoadingScreen extends ScreenAdapter {
         loadingBg.setY(loadingBarHidden.getY() + 3);
     }
 
+	/**
+	 * render is called when the screen should render itself.
+	 * Calculate and displa the loading bar progression.
+	 */
     @Override
     public void render(float delta) {
         // Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (parent.assetManager.manager.update()) { // Load some, will return true if done loading
-            if (Gdx.input.isTouched()) { // If the screen is touched after the game is done loading, go to the main menu screen
+        if (parent.assetManager.manager.update()) { // will return true if done loading
+            if (Gdx.input.isTouched()) { // If the screen is touched after the game is done loading, go to the menu screen
                 parent.changeScreen(JeuDesPetitsChevaux.MENU);
             }
         }
@@ -131,7 +148,10 @@ public class LoadingScreen extends ScreenAdapter {
         stage.act();
         stage.draw();
     }
-
+    
+	/**
+	 * hide is called when this screen is no longer the current screen.
+	 */
     @Override
     public void hide() {
         // Dispose the loading assets as we no longer need them

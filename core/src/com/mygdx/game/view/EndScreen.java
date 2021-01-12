@@ -12,15 +12,23 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
 
+/**
+ * EndScreen is the screen displayed when a player win and end the game.
+ */
 public class EndScreen extends ScreenAdapter {
-
-	private JeuDesPetitsChevaux parent;
-	private Stage stage;
-	private Skin skin;
+	private JeuDesPetitsChevaux parent; //Parent class of the screen
+	private Stage stage; //A 2D scene graph containing hierarchies of actors. Stage handles the viewport and distributes input events.
+	private Skin skin;//Appearence assets of the screen's UI
+	//Simple text label
 	private Label winnerLabel;
 	private Label congratulationLabel;
+	//Sounds the screen will use
 	private Sound fanfare;
 	
+	/**
+	 * EndScreen's constructor
+	 * Create a new camera and fetch the assets
+	 */
 	public EndScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
 		stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
@@ -28,12 +36,15 @@ public class EndScreen extends ScreenAdapter {
 		fanfare = jdpc.assetManager.manager.get("triumphalFanfare/click.mp3", Sound.class);
 	}
 	
+	/**
+	 * show is called when this screen becomes the current screen
+	 * Display which player is the winner
+	 */
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
 		Table table = new Table();
 		table.setFillParent(true);
-		table.setDebug(false);		//Ajoute des boites pour visualiser l'emplacement des elements si true.
 		stage.addActor(table);
 		
 		congratulationLabel = new Label( "Congratulation !", skin );
@@ -64,9 +75,12 @@ public class EndScreen extends ScreenAdapter {
 		table.row().pad(10,0,0,10);
 		table.add(winnerLabel);
 		
-		fanfare.play(parent.getPreferences().getSoundVolume());
+		fanfare.play(parent.preferences.getSoundVolume());
 	}
  
+	/**
+	 * render is called when the screen should render itself.
+	 */
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);

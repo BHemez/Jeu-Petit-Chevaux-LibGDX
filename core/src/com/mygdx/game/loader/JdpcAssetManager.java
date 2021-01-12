@@ -7,10 +7,20 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+/**
+ * JdpcAssetManager contain the app AssetManager
+ * gather every actions regarding the assets' loading
+ */
 public class JdpcAssetManager {
-
+	/**
+	 * Our app AssetManager is created here.
+	 * Default libGDX assetManager.
+	 */
 	public final AssetManager manager = new AssetManager();
 	
+	/**
+	 * List of string of where the files are in the assets folder.
+	 */
 	//Textures
 	private final String loadingAtlas = "loading/loading.pack";
 	private final String pionsAtlas = "pions/pions.pack";
@@ -18,19 +28,18 @@ public class JdpcAssetManager {
 	private final String diceAtlas = "dice/dice.pack";
 	private final String possibleMoveAtlas = "possibleMove/possibleMove.pack";
 	private final String button = "button/button.pack";
-	
 	//Sounds
 	private final String clickSound = "sounds/click.mp3";
 	private final String diceSound = "sounds/diceRoll.mp3";
 	private final String fanfare = "sounds/triumphalFanfare.mp3";
-	
 	//Music
 	private final String jazzMusic = "music/Jazz.mp3";
-	
 	//Skin
 	private final String skin = "skin/glassy-ui.json";
 	
-	
+	/**
+	 * Methods called to load assets into the manager.
+	 */
 	public void queueAddPions(){
 		manager.load(pionsAtlas, TextureAtlas.class);
 	}

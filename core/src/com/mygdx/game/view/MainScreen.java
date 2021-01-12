@@ -25,19 +25,23 @@ import com.mygdx.game.system.GameMap;
 import com.mygdx.game.system.JdpcSystem;
 import com.mygdx.game.system.Pawn;
 
+/**
+ * MainScreen is the screen where the game board is displayed.
+ */
 public class MainScreen extends ScreenAdapter {
 	
-	public JeuDesPetitsChevaux parent;
+	public JeuDesPetitsChevaux parent; //Parent class of the screen.
 	
-	private MouseKeyboardController controller;
-	private OrthographicCamera camera;
-	private GameMap gameMap;
-    public ArrayList<Pawn> pawnList = new ArrayList<Pawn>();
+	private MouseKeyboardController controller;// Controller for interactions between user and the game.
+	private OrthographicCamera camera; //Create a camera to show our gameBoard
+    public Viewport viewport; //Viewport to translate camera's world unit into pixels.
     
-    public Viewport viewport;
+	private GameMap gameMap; //Map containing our gameboard
+    public ArrayList<Pawn> pawnList = new ArrayList<Pawn>(); //List of pawn present on the board.
+
+    public JdpcSystem system; //Game logic
     
-    public JdpcSystem system;
-    
+    //Set of actor, label and sprites to create the UI
     public Actor possibleMove;
     public Actor selectedPawn;
     public Label playerLabel;
@@ -47,21 +51,30 @@ public class MainScreen extends ScreenAdapter {
     public Sprite nextTurnButton;
     public Sprite menuButton;
    
+    //Textures Atlas containing some assets images
     public TextureAtlas diceAtlas;
     public TextureAtlas playerIconAtlas;
     private TextureAtlas buttonAtlas;
     
-    private Stage stage;
-    private Skin skin;
+    private Skin skin; //Appearence assets of the screen's UI
     
-    private int draggedID = 0;
+    private Stage stage; //A 2D scene graph containing hierarchies of actors. Stage handles the viewport and distributes input events.
+
+    //ID to keep track of the object the user interact with
+    private int draggedID = 0; 
     private int downOnID = 0;
     
+    //Sounds the screen will use
 	private Sound click;
 	private Sound diceRoll;
+	//Int to call the sounds
 	private static final int CLICK_SOUND = 0;
 	private static final int DICE_SOUND = 1;
 	
+	/**
+	 * MainScreen's constructor.
+	 * Fetch the assets, create the pawns and set up the game.
+	 */
 	public MainScreen(JeuDesPetitsChevaux jdpc, int numberOfPlayer) {
 		this.parent = jdpc;
 		
@@ -129,6 +142,10 @@ public class MainScreen extends ScreenAdapter {
 		diceRoll = parent.assetManager.manager.get("sounds/diceRoll.mp3", Sound.class);
 	}
 	
+	/**
+	 * show is called when this screen becomes the current screen
+	 * Fetch the UI assets and set it up.
+	 */
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(controller);
@@ -166,6 +183,10 @@ public class MainScreen extends ScreenAdapter {
     	this.selectedPawn.setVisible(false);
 	}
 	
+	/**
+	 * render is called when the screen should render itself.
+	 * Update the display and listen to user actions to trigger reactions
+	 */
 	@Override
     public void render(float delta) {		
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -241,6 +262,7 @@ public class MainScreen extends ScreenAdapter {
          	}
     	}
     	
+    	//DISPLAY UPDATE
         camera.update();
         gameMap.tiledMapRenderer.setView(camera);
         gameMap.tiledMapRenderer.render();
@@ -249,20 +271,26 @@ public class MainScreen extends ScreenAdapter {
         stage.draw();
     }
     
+	/**
+	 * resize is called when the Application is resized.
+	 */
     @Override
     public void resize(int width, int height){
        viewport.update(width,height);
        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
     }
     
+	/**
+	 * playSound is called when a sound needs to be played
+	 */
 	public void playSound(int sound) {
-		if(parent.getPreferences().isSoundEffectsEnabled()) {
+		if(parent.preferences.isSoundEffectsEnabled()) {
 			switch(sound){
 			case CLICK_SOUND:
-				click.play(parent.getPreferences().getSoundVolume());
+				click.play(parent.preferences.getSoundVolume());
 				break;
 			case DICE_SOUND:
-				diceRoll.play(parent.getPreferences().getSoundVolume());
+				diceRoll.play(parent.preferences.getSoundVolume());
 				break;
 			}
 		}

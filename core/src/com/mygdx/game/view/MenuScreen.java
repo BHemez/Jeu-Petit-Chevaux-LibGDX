@@ -15,23 +15,31 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
 
+/**
+ * MenuScreen is the sceen showing the app menu
+ */
 public class MenuScreen extends ScreenAdapter{
 	
-	private JeuDesPetitsChevaux parent;
-	private Stage stageMenu;
-	private Stage stageMenuResume;
-	private Stage stageChoice;
-	private int currentMenu;
+	private JeuDesPetitsChevaux parent; //Parent class of the screen.
+	private Stage stageMenu;  //Stage holding the default menu actors.
+	private Stage stageMenuResume; //Stage holding the menu actors with the resume button
+	private Stage stageChoice; //Stage holding the menu actors when the user need to choose a number of player
+	
+	private int currentMenu; //int to keep track of wich actor to display
 	private static final int MENU = 0;
 	private static final int MENU_RESUME = 1;
 	private static final int MENU_CHOICE = 2;
 	
+	//Sound and music the screen will use
 	private Sound click;
-	public Music jazz;
-	private Skin skin;
-	
 	private static final int CLICK_SOUND = 0;
+	public Music jazz;
 	
+	private Skin skin; //Appearence assets of the screen's UI
+	
+	/**
+	 * MenuScreen's constructor
+	 */
 	public MenuScreen(JeuDesPetitsChevaux jdpc) {
 		this.parent = jdpc;
 		stageMenu = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
@@ -43,11 +51,15 @@ public class MenuScreen extends ScreenAdapter{
 		skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 	}
 	
+	/**
+	 * show is called when this screen becomes the current screen
+	 */
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stageMenu);
 		
-		//CREATION DES BOUTONS & TABLES
+		//=== BUTTONS AND TABLE CREATION ===
+		//Defauult Menu
 		TextButton newGame = new TextButton("New Game", skin);
 		TextButton preferences = new TextButton("Preferences", skin);
 		TextButton exit = new TextButton("Exit", skin);
@@ -62,6 +74,7 @@ public class MenuScreen extends ScreenAdapter{
 		tableMenu.add(exit).fillX().uniformX();
 		stageMenu.addActor(tableMenu);
 	
+		//Menu with Resume button
 		TextButton resume = new TextButton("Resume Game", skin);
 		TextButton newGameR = new TextButton("New Game", skin);
 		TextButton preferencesR = new TextButton("Preferences", skin);
@@ -78,6 +91,7 @@ public class MenuScreen extends ScreenAdapter{
 		tableMenuResume.add(exitR).fillX().uniformX();
 		stageMenuResume.addActor(tableMenuResume);
 		
+		//Menu with playerNumber choice
 		Label howMany = new Label("How many players ?", skin);
 		TextButton newGame2P = new TextButton("2P", skin);
 		TextButton newGame3P = new TextButton("3P", skin);
@@ -95,7 +109,7 @@ public class MenuScreen extends ScreenAdapter{
 		tableChoice.add(back).fillX().uniformX().colspan(3);
 		stageChoice.addActor(tableChoice);
 		
-		//CREATION DES LISTENER DES BOUTONS
+		//=== BUTTON'S LISTENER CREATION ===
 		exit.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -193,6 +207,9 @@ public class MenuScreen extends ScreenAdapter{
 		
 	}
  
+	/**
+	 * render is called when the screen should render itself.
+	 */
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
@@ -216,15 +233,18 @@ public class MenuScreen extends ScreenAdapter{
 			break;
 		}
 		
-		if(parent.getPreferences().isMusicEnabled()) {
+		if(parent.preferences.isMusicEnabled()) {
 			jazz.play();
-			jazz.setVolume(parent.getPreferences().getMusicVolume());
+			jazz.setVolume(parent.preferences.getMusicVolume());
 		} else {
 			jazz.pause();
 		}
 		
 	}
  
+	/**
+	 * resize is called when the Application is resized.
+	 */
 	@Override
 	public void resize(int width, int height) {
 		stageMenu.getViewport().update(width, height, true);
@@ -232,11 +252,14 @@ public class MenuScreen extends ScreenAdapter{
 		stageChoice.getViewport().update(width, height, true);
 	}
 	
+	/**
+	 * playSound is called when a sound needs to be played
+	 */
 	public void playSound(int sound) {
-		if(parent.getPreferences().isSoundEffectsEnabled()) {
+		if(parent.preferences.isSoundEffectsEnabled()) {
 			switch(sound){
 			case CLICK_SOUND:
-				click.play(parent.getPreferences().getSoundVolume());
+				click.play(parent.preferences.getSoundVolume());
 				break;
 			}
 		}
