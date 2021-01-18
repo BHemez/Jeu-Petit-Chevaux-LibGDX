@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.JeuDesPetitsChevaux;
 import com.mygdx.game.controller.MouseKeyboardController;
 import com.mygdx.game.system.GameMap;
@@ -34,7 +33,7 @@ public class MainScreen extends ScreenAdapter {
 	
 	private MouseKeyboardController controller;// Controller for interactions between user and the game.
 	private OrthographicCamera camera; //Create a camera to show our gameBoard
-    public Viewport viewport; //Viewport to translate camera's world unit into pixels.
+    public FitViewport viewport; //Viewport to translate camera's world unit into pixels.
     
 	private GameMap gameMap; //Map containing our gameboard
     public ArrayList<Pawn> pawnList = new ArrayList<Pawn>(); //List of pawn present on the board.
@@ -58,7 +57,7 @@ public class MainScreen extends ScreenAdapter {
     
     private Skin skin; //Appearence assets of the screen's UI
     
-    private Stage stage; //A 2D scene graph containing hierarchies of actors. Stage handles the viewport and distributes input events.
+    private Stage stage; //A 2D scene graph containing hierarchies of actors.
 
     //ID to keep track of the object the user interact with
     private int draggedID = 0; 
@@ -83,7 +82,7 @@ public class MainScreen extends ScreenAdapter {
 		this.system = new JdpcSystem(this, numberOfPlayer);
 		
         //=== LOADING MAP ===
-        gameMap = new GameMap(new TmxMapLoader().load("carte.tmx"), 16);
+        gameMap = new GameMap(new TmxMapLoader().load("carte.tmx"));
 
         //=== ADDING CAMERA ===
         camera = new OrthographicCamera();
@@ -190,14 +189,13 @@ public class MainScreen extends ScreenAdapter {
 	@Override
     public void render(float delta) {		
         Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         //KEYBOARD
         if(controller.escape) {
     		controller.escape = false;
             parent.changeScreen(JeuDesPetitsChevaux.MENU);
-    	}else if(controller.spacebar) {
+    	} else if(controller.spacebar) {
     		this.system.changeTurn();
     	}
         
@@ -224,7 +222,9 @@ public class MainScreen extends ScreenAdapter {
             	boolean pFound = false;
             	
             	for(Pawn p : pawnList) {
-            		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) && p.team == system.playerList.get(system.playerTurn-1) && !pFound && (this.downOnID == p.id || this.downOnID == 0) ) {
+            		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) 
+            				&& p.team == system.playerList.get(system.playerTurn-1) 
+            				&& !pFound && (this.downOnID == p.id || this.downOnID == 0) ) {
             			system.findPossibleMove(p, true, false);
             			pFound = true;
             			downOnID = p.id;
@@ -247,7 +247,9 @@ public class MainScreen extends ScreenAdapter {
              Vector3 position = viewport.unproject(dragCoordinates);
              if(this.system.moveDone == false && this.system.diceThrown) {
              	for(Pawn p : pawnList) {
-             		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) && p.team == system.playerList.get(system.playerTurn-1) && (this.draggedID == p.id || this.draggedID == 0)) {
+             		if(p.spritePion.getBoundingRectangle().contains(position.x, position.y) 
+             				&& p.team == system.playerList.get(system.playerTurn-1) 
+             				&& (this.draggedID == p.id || this.draggedID == 0)) {
              			p.setPosition(position.x-(GameMap.TILESIZE/2), position.y-(GameMap.TILESIZE/2));
              			this.draggedID = p.id;
              		}

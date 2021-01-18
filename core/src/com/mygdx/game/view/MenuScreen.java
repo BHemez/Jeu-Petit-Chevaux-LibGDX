@@ -59,13 +59,12 @@ public class MenuScreen extends ScreenAdapter{
 		Gdx.input.setInputProcessor(stageMenu);
 		
 		//=== BUTTONS AND TABLE CREATION ===
-		//Defauult Menu
+		//Default Menu
 		TextButton newGame = new TextButton("New Game", skin);
 		TextButton preferences = new TextButton("Preferences", skin);
 		TextButton exit = new TextButton("Exit", skin);
 		Table tableMenu = new Table();
 		tableMenu.setFillParent(true);
-		tableMenu.setDebug(false);	//Ajoute des boites pour visualiser l'emplacement des elements si true.
 		tableMenu.row().pad(0, 0, 10, 0);
 		tableMenu.add(newGame).fillX().uniformX();
 		tableMenu.row().pad(0, 0, 10, 0);
@@ -81,7 +80,6 @@ public class MenuScreen extends ScreenAdapter{
 		TextButton exitR = new TextButton("Exit", skin);
 		Table tableMenuResume = new Table();
 		tableMenuResume.setFillParent(true);
-		tableMenuResume.setDebug(false);				//Ajoute des boites pour visualiser l'emplacement des elements si true.
 		tableMenuResume.row().pad(0, 0, 10, 0);
 		tableMenuResume.add(newGameR).fillX().uniformX();
 		tableMenuResume.add(resume).fillX().uniformX();
@@ -99,7 +97,6 @@ public class MenuScreen extends ScreenAdapter{
 		TextButton back = new TextButton("Back", skin);
 		Table tableChoice = new Table();
 		tableChoice.setFillParent(true);
-		tableChoice.setDebug(false);		//Ajoute des boites pour visualiser l'emplacement des elements si true.
 		tableChoice.add(howMany).colspan(3);
 		tableChoice.row().pad(0, 0, 10, 0);
 		tableChoice.add(newGame2P).fillX().uniformX();

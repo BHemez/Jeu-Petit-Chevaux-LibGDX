@@ -17,7 +17,8 @@ import com.mygdx.game.JeuDesPetitsChevaux;
  */
 public class EndScreen extends ScreenAdapter {
 	private JeuDesPetitsChevaux parent; //Parent class of the screen
-	private Stage stage; //A 2D scene graph containing hierarchies of actors. Stage handles the viewport and distributes input events.
+	//Stage handles the viewport and distributes input events.
+	private Stage stage; //A 2D scene graph containing hierarchies of actors. 
 	private Skin skin;//Appearence assets of the screen's UI
 	//Simple text label
 	private Label winnerLabel;
@@ -33,7 +34,7 @@ public class EndScreen extends ScreenAdapter {
 		this.parent = jdpc;
 		stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 		skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
-		fanfare = jdpc.assetManager.manager.get("triumphalFanfare/click.mp3", Sound.class);
+		fanfare = jdpc.assetManager.manager.get("sounds/triumphalFanfare.mp3", Sound.class);
 	}
 	
 	/**
@@ -42,7 +43,6 @@ public class EndScreen extends ScreenAdapter {
 	 */
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
 		Table table = new Table();
 		table.setFillParent(true);
 		stage.addActor(table);

@@ -7,6 +7,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.game.JeuDesPetitsChevaux;
 
+/**
+ * The DesktopLauncher class is there to start the game
+ * on desktop platform.
+ */
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Dimension screenDimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();

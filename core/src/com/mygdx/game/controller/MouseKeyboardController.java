@@ -67,8 +67,8 @@ public class MouseKeyboardController implements InputProcessor {
 	 * touchDown(int,int,int,int) is used when the user click on the screen.
 	 * Also work for mobile.
 	 * Button 0 is left click
-	 * Button 2 is midle click
-	 * Button 3 is right click
+	 * Button 1 is midle click
+	 * Button 2 is right click
 	 * Pointer is the number of thing pointing at the screen
 	 */
 	@Override

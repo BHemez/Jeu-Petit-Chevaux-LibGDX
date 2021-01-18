@@ -65,7 +65,7 @@ public class GameMap {
      * GameMap's constructor, create a renderer using a TiledMap and fetch
      * the map's properties.
      */
-	public GameMap(TiledMap tiledMap, float tileSize) {
+	public GameMap(TiledMap tiledMap) {
 		this.tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap);
 		MapProperties prop = tiledMap.getProperties();
 		GameMap.TILESIZE = prop.get("tilewidth", Integer.class);

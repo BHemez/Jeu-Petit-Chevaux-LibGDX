@@ -18,8 +18,8 @@ public class Pawn {
     protected int ladderPosition = -2; //Current position of the pawn in the ladder (-2 of not in ladder)
     protected float[] stablePosition; //X and Y coordinate of the pawn's stable position
     protected float[][] ladderMatrix; //Matrix of X and Y position of the pawn ladder's steps
-    protected Boolean passed55; //Keep track if the pawn has passed the end of teh track or not (used to prevent a pawn for entering the ladder early)
-    protected Boolean isInStable; //Keep track if a ppawn is in Stable or not
+    protected Boolean passed55; //Keep track if the pawn has passed the end of the track or not (used to prevent a pawn for entering the ladder early)
+    protected Boolean isInStable; //Keep track if a pawn is in Stable or not
 
     /**
      * Pawn's constructor
@@ -56,7 +56,12 @@ public class Pawn {
     	this.racePosition = -2;
     	this.ladderPosition = -2;
     	this.isInStable = true;
-    	this.passed55 = false;
+    	//If the pawn start at the begining of the board, consider it already passed55
+        if(this.raceStartPosition == 0 ) {
+        	passed55 = true;
+        } else {
+        	passed55 = false;
+        }
     	this.setPosition(this.stablePosition[0]*16, this.stablePosition[1]*16);
     }
 	

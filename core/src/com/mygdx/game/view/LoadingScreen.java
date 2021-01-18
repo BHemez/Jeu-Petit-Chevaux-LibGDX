@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -20,7 +19,7 @@ import com.mygdx.game.JeuDesPetitsChevaux;
  */
 public class LoadingScreen extends ScreenAdapter {
 	private JeuDesPetitsChevaux parent; //Parent class of the screen
-    private Stage stage; //A 2D scene graph containing hierarchies of actors. Stage handles the viewport and distributes input events.
+    private Stage stage; //A 2D scene graph containing hierarchies of actors.
     
     //Set of images used in the screen.
     private Image logo;
@@ -28,7 +27,7 @@ public class LoadingScreen extends ScreenAdapter {
     private Image loadingBarHidden;
     private Image screenBg;
     private Image loadingBg;
-    private Actor loadingBar; //Animated image for the loading bar
+    private Animated loadingBar; //Animated image for the loading bar
     
     private float startX, endX; //Start and End position of the loading bar
     private float percent; //Loading progress in %
@@ -142,7 +141,6 @@ public class LoadingScreen extends ScreenAdapter {
         loadingBarHidden.setX(startX + endX * percent);
         loadingBg.setX(loadingBarHidden.getX() + 30);
         loadingBg.setWidth(450 - 450 * percent);
-        loadingBg.invalidate();
 
         // Show the loading screen
         stage.act();

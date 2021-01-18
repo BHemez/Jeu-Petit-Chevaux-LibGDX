@@ -128,10 +128,12 @@ public class JdpcSystem {
 		pawn.racePosition = position;
 		pawn.ladderPosition = ladPosition;
 		if(position != -2) {
-			pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
+			pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, 
+					GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
 			checkUnder(pawn);
 		} else {
-			pawn.setPosition(pawn.ladderMatrix[0][ladPosition]*GameMap.TILESIZE, pawn.ladderMatrix[1][ladPosition]*GameMap.TILESIZE);
+			pawn.setPosition(pawn.ladderMatrix[0][ladPosition]*GameMap.TILESIZE, 
+					pawn.ladderMatrix[1][ladPosition]*GameMap.TILESIZE);
 		}
 		this.moveDone = true;
 		unShowPossibleMove();
@@ -142,7 +144,8 @@ public class JdpcSystem {
 	 * it's starting position. Also set it out of the stable.
 	 */
 	private void movePawnToStart(Pawn pawn) {
-		pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceStartPosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.raceStartPosition]*GameMap.TILESIZE);
+		pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.raceStartPosition]*GameMap.TILESIZE, 
+				GameMap.POSITIONMATRIX[1][pawn.raceStartPosition]*GameMap.TILESIZE);
 		pawn.isInStable = false;
 		pawn.racePosition = pawn.raceStartPosition;
 		this.moveDone = true;
@@ -193,30 +196,35 @@ public class JdpcSystem {
 		int futurePosition = pawn.racePosition;
 		boolean moveInLadder = false; //Check if the pawn will move in the ladder
 		
-		if(pawn.racePosition == pawn.raceEndPosition && pawn.passed55) {//when the pawn is at the bottom of the ladder
+		//when the pawn is at the bottom of the ladder
+		if(pawn.racePosition == pawn.raceEndPosition && pawn.passed55) {
 			if(this.diceValue == 1) {
 				moveInLadder = true;
 				futurePosition = 0;
 				movePossible = true;
 			}
-		} else if(pawn.ladderPosition >= 0 && pawn.ladderPosition < 5) {//when the pawn is in the ladder but not the last position
+			//when the pawn is in the ladder but not the last position
+		} else if(pawn.ladderPosition >= 0 && pawn.ladderPosition < 5) {
 			if(this.diceValue == pawn.ladderPosition+2) {
 				moveInLadder = true;
 				futurePosition = pawn.ladderPosition+1;
 				movePossible = true;
 			}
-	    } else if(pawn.ladderPosition == 5) {//when the pawn is in the last step of the ladder
+			//when the pawn is in the last step of the ladder
+	    } else if(pawn.ladderPosition == 5) {
 	    	if(this.diceValue == 6) {
 				moveInLadder = true;
 				futurePosition = 6;
 				movePossible = true;
 	    	}
-		} else if(pawn.isInStable) {//when the pawn is in it's stable
+	    	//when the pawn is in it's stable
+		} else if(pawn.isInStable) {
 			if(this.diceValue == 6 && this.diceThrown) {
 				futurePosition = pawn.raceStartPosition;
 				movePossible = true;
 			}
-		} else {//when the pawn is in the race track
+			//when the pawn is in the race track
+		} else {
 			int direction = 1;//keep track if the pawn is movingg forward(1) or backward(-1) after a coollision
 			int distanceLeft = this.diceValue;//Keep track of the number of tile the pawn need to cross
 			
@@ -254,10 +262,12 @@ public class JdpcSystem {
 			if(movePossible) {
 				if(moveInLadder) {
 					screen.possibleMove.setVisible(true);
-					screen.possibleMove.setPosition(pawn.ladderMatrix[0][futurePosition]*GameMap.TILESIZE,pawn.ladderMatrix[1][futurePosition]*GameMap.TILESIZE);
+					screen.possibleMove.setPosition(pawn.ladderMatrix[0][futurePosition]*GameMap.TILESIZE,
+							pawn.ladderMatrix[1][futurePosition]*GameMap.TILESIZE);
 				} else {
 					screen.possibleMove.setVisible(true);
-					screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][futurePosition]*GameMap.TILESIZE,GameMap.POSITIONMATRIX[1][futurePosition]*GameMap.TILESIZE);
+					screen.possibleMove.setPosition(GameMap.POSITIONMATRIX[0][futurePosition]*GameMap.TILESIZE,
+							GameMap.POSITIONMATRIX[1][futurePosition]*GameMap.TILESIZE);
 				}
 			} else {
 				screen.possibleMove.setVisible(false);
@@ -265,25 +275,32 @@ public class JdpcSystem {
 
 		} else if(isSettingPosition) {
 			if(moveInLadder) {
-				if(movePossible && pawn.spritePion.getBoundingRectangle().contains(pawn.ladderMatrix[0][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), pawn.ladderMatrix[1][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
+				if(movePossible && pawn.spritePion.getBoundingRectangle().contains(
+						pawn.ladderMatrix[0][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), 
+						pawn.ladderMatrix[1][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
 					movePawn(pawn, -2, futurePosition);
 					if(futurePosition == 6) {
 						triggerVictory();
 					}
 				}
 			} else {
-				if(movePossible && pawn.spritePion.getBoundingRectangle().contains(GameMap.POSITIONMATRIX[0][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), GameMap.POSITIONMATRIX[1][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
+				if(movePossible && pawn.spritePion.getBoundingRectangle().contains(
+						GameMap.POSITIONMATRIX[0][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2), 
+						GameMap.POSITIONMATRIX[1][futurePosition]*GameMap.TILESIZE+(GameMap.TILESIZE/2))) {
 					if(pawn.isInStable && futurePosition == pawn.raceStartPosition) {
 						movePawnToStart(pawn);
 					} else {
 						movePawn(pawn, futurePosition, -2);
 					}
 				} else if(pawn.isInStable) {
-					pawn.setPosition(pawn.stablePosition[0]*GameMap.TILESIZE,pawn.stablePosition[1]*GameMap.TILESIZE);
+					pawn.setPosition(pawn.stablePosition[0]*GameMap.TILESIZE,
+							pawn.stablePosition[1]*GameMap.TILESIZE);
 				} else if(pawn.racePosition != -2){
-					pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE, GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
+					pawn.setPosition(GameMap.POSITIONMATRIX[0][pawn.racePosition]*GameMap.TILESIZE,
+							GameMap.POSITIONMATRIX[1][pawn.racePosition]*GameMap.TILESIZE);
 				} else if(pawn.ladderPosition != -2){
-					pawn.setPosition(pawn.ladderMatrix[0][pawn.ladderPosition]*GameMap.TILESIZE, pawn.ladderMatrix[1][pawn.ladderPosition]*GameMap.TILESIZE);//TRIGGER TROP TOT
+					pawn.setPosition(pawn.ladderMatrix[0][pawn.ladderPosition]*GameMap.TILESIZE,
+							pawn.ladderMatrix[1][pawn.ladderPosition]*GameMap.TILESIZE);
 				}
 			}	
 		}
